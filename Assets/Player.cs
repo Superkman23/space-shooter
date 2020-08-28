@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
   [SerializeField] float _Acceleration;
   Vector2 _VelocityChange;
 
+  [SerializeField] bool _MidairJump;
+  [SerializeField] float _JumpDelay;
+  float _JumpDelayR;
 
   [SerializeField] LayerMask _WhatIsGround;
   [SerializeField] Vector2 _TopLeftGround;
@@ -33,13 +36,17 @@ public class Player : MonoBehaviour
 
 
 
+    _JumpDelayR -= Time.deltaTime;
+
     _Rigidbody.velocity += _VelocityChange;
     _VelocityChange = Vector2.zero;
+
     if(_Rigidbody.velocity.x > 0){
       _Direction = true;
     } else if(_Rigidbody.velocity.x < 0)  {
       _Direction = false;
     }
+
   }
 
   void HandleMovement()
@@ -48,9 +55,10 @@ public class Player : MonoBehaviour
 
     if(input.y > 0)
     {
-      if (IsGrounded())
+      if ((IsGrounded() || _MidairJump) && _JumpDelayR <= 0)
       {
         Jump();
+        _JumpDelayR = _JumpDelay;
       }
     }
 
@@ -67,7 +75,7 @@ public class Player : MonoBehaviour
 
   void Jump()
   {
-    _VelocityChange.y += 10;
+    _Rigidbody.velocity = new Vector2(_Rigidbody.velocity.x, 10);
   }
   bool IsGrounded() => Physics2D.OverlapArea(_TopLeftGround + (Vector2)transform.position, _BottomRightGround + (Vector2)transform.position, _WhatIsGround);
 
