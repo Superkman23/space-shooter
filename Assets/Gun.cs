@@ -11,7 +11,6 @@ public enum GunState
 public class Gun : MonoBehaviour, IPickup
 {
   PickupState _State = PickupState.Dropped;
-  Player _Owner = null;
 
   // Start is called before the first frame update
   void Start()
@@ -21,7 +20,12 @@ public class Gun : MonoBehaviour, IPickup
 
   void OnTriggerEnter(Collider other)
   {
-
+    // If the thing colliding is the player
+    if (other.CompareTag("Player"))
+    {
+      // Trigger the pickup event
+      OnPickup(other.gameObject);
+    }
   }
 
   public void OnShoot()
@@ -32,13 +36,11 @@ public class Gun : MonoBehaviour, IPickup
   public void OnDrop(GameObject who)
   {
     _State = PickupState.Dropped;
-    _Owner = null;
   }
 
   public void OnPickup(GameObject who)
   {
     _State = PickupState.PickedUp;
-    _Owner = who.GetComponent<Player>();
   }
 
   public PickupState GetPickupState()
