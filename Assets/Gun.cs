@@ -2,21 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GunState
-{ 
-    
-}
-
-
 public class Gun : MonoBehaviour, IPickup
 {
+  [SerializeField] GameObject _BulletObject = null;
   PickupState _State = PickupState.Dropped;
 
-  // Start is called before the first frame update
-  void Start()
-  {
-
-  }
+  int _BulletsLeft = 10;
 
   void OnTriggerEnter(Collider other)
   {
@@ -28,9 +19,19 @@ public class Gun : MonoBehaviour, IPickup
     }
   }
 
-  public void OnShoot()
+  // Returns true if the gun is empty
+  public bool Shoot()
   {
+    _BulletsLeft--;
+    GameObject newBullet = Instantiate(_BulletObject,transform.position, transform.parent.rotation);
+    newBullet.GetComponent<Rigidbody>().AddForce(newBullet.transform.forward * 10);
 
+    return _BulletsLeft == 0;
+  }
+
+  public void Throw()
+  {
+    Destroy(gameObject);
   }
 
   public void OnDrop(GameObject who)
