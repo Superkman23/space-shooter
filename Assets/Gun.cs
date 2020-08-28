@@ -24,7 +24,10 @@ public class Gun : MonoBehaviour, IPickup
 
   }
 
-  public 
+  public void OnShoot()
+  {
+
+  }
 
   public void OnDrop(GameObject who)
   {
