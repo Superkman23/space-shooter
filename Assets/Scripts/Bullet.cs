@@ -11,7 +11,7 @@ public class Bullet : MonoBehaviour {
       }
     }
 
-    if (collision.CompareTag ("Bullet")) {
+    if (collision.GetComponent<Bullet>()) {
       return;
     }
 
@@ -28,7 +28,7 @@ public class Bullet : MonoBehaviour {
       }
     }
 
-    if (collision.CompareTag ("Bullet")) {
+    if (collision.GetComponent<Bullet>()) {
       return;
     }
 
