@@ -89,8 +89,6 @@ public class Gun : MonoBehaviour, IPickup {
       return;
     }
 
-    transform.rotation = Quaternion.identity;
-
     controller._Holding = this;
 
     _State = PickupState.PickedUp;
@@ -101,6 +99,7 @@ public class Gun : MonoBehaviour, IPickup {
     _Parent._Player = who.GetComponent<Player> ();
 
     transform.localPosition = _OffsetFromPlayer;
+    transform.localRotation = Quaternion.identity;
   }
 
   public PickupState GetPickupState () {
