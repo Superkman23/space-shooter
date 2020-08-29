@@ -2,10 +2,19 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
   public int _Damage = 10;
-  public Collider2D _Parent = null;
+  public Collider2D[] _Ignoring = null;
 
   void OnTriggerEnter2D (Collider2D collision) {
-    if (collision == _Parent) {
+    foreach (var ignore in _Ignoring)
+    {
+      if (collision == ignore)
+      {
+        return;
+      }
+    }
+
+    if (collision.CompareTag("Bullet"))
+    {
       return;
     }
 
@@ -16,8 +25,12 @@ public class Bullet : MonoBehaviour {
   }
 
   void OnTriggerStay2D (Collider2D collision) {
-    if (collision == _Parent) {
-      return;
+    foreach (var ignore in _Ignoring )
+    {
+      if (collision == ignore)
+      {
+        return;
+      }
     }
 
     var health = collision.GetComponent<IHealth> ();

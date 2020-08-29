@@ -6,6 +6,7 @@ public class Gun : MonoBehaviour, IPickup {
   [SerializeField] int _ThrownDamage = 5;
   [SerializeField] Vector2 _OffsetFromPlayer = Vector2.zero;
   [SerializeField] int _ClipSize = 10;
+  [SerializeField] bool _UnlimitedAmmo = false;
 
   [Header ("Components")]
   [SerializeField] GameObject _BulletObject = null;
@@ -58,11 +59,16 @@ public class Gun : MonoBehaviour, IPickup {
       int direction = (int) _Parent._Player._Direction;
       GameObject newBullet = Instantiate (_BulletObject, transform.position + (Vector3.right * -direction / 1.5f), transform.parent.rotation);
       newBullet.GetComponent<Rigidbody2D> ().velocity = (Vector3.right * -direction * _BulletForce) + (Vector3.right * _Parent._Rigidbody.velocity.x / 2);
-      newBullet.GetComponent<Bullet> ()._Parent = _Parent._Collider;
+      newBullet.GetComponent<Bullet> ()._Ignoring = new Collider2D[2] { _Parent._Collider, _Collider };
 
     }
+
+    if (!_UnlimitedAmmo)
+    { 
     // Shoot one of the bullets in the magazine
     _ClipSize--;
+    }
+    
     // Returns true if the gun is empty, in which case the gun is thrown
     return _ClipSize < 0;
   }
