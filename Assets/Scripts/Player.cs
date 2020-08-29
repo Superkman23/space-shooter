@@ -8,6 +8,7 @@ public class Player : NetworkBehaviour
   [SerializeField] Sprite _RedSprite;
   [SerializeField] Sprite _BlueSprite;
 
+  [SerializeField] float _Acceleration;
   [SerializeField] float _MoveSpeed;
 
   void Start()
@@ -26,13 +27,23 @@ public class Player : NetworkBehaviour
   [Command]
   void CMDSendInput(Vector2 input)
   {
-    RpcRunInput(input);
+    Vector2 velocityChange = Vector2.zero;
+
+
+    // Movement
+    float force = input.x * _MoveSpeed;
+    force -= _Link._Rigidbody.velocity.x;
+    float acceleration = _Acceleration * Time.fixedDeltaTime;
+    force = Mathf.Clamp(force, -acceleration, acceleration);
+
+    velocityChange.x = force;
+    RpcApplyForce(velocityChange);
   }
 
   [ClientRpc]
-  void RpcRunInput(Vector2 input)
+  void RpcApplyForce(Vector2 input)
   {
-    _Link.ApplyForce(input * _MoveSpeed, ForceMode2D.Impulse);
+    _Link.AddDirectForce(input);
   }
 
 

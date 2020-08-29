@@ -11,7 +11,7 @@ public class PhysicsLink : NetworkBehaviour
   [SyncVar] public float _AngularVelocity;
   [SyncVar] public float _Rotation;
 
-  void Update()
+  void FixedUpdate()
   {
     if (isServer)// If we are the server update the varibles with our rigidbody info
     {
@@ -44,9 +44,20 @@ public class PhysicsLink : NetworkBehaviour
     CmdApplyForce(force, FMode);
 
   }
-  [Command]//function that runs on server when called by a client
+  public void AddDirectForce(Vector2 force)//apply force on the client-side to reduce the appearance of lag and then apply it on the server-side
+  {
+    if (!hasAuthority) { return; }
+    _Rigidbody.velocity += force;
+    CmdAddDirectForce(force);
+  }
+  [Command]
   public void CmdApplyForce(Vector2 force, ForceMode2D FMode)
   {
     _Rigidbody.AddForce(force, FMode);//apply the force on the server side
+  }
+  [Command]
+  public void CmdAddDirectForce(Vector2 force)
+  {
+    _Rigidbody.velocity += force;
   }
 }
