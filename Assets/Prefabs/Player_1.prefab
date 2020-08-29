@@ -131,8 +131,8 @@ MonoBehaviour:
   _WhatIsGround:
     serializedVersion: 2
     m_Bits: 256
-  _TopLeftGround: {x: 0.49, y: -0.5}
-  _BottomRightGround: {x: -0.49, y: -0.6}
+  _TopLeftGround: {x: 0.49, y: -0.49}
+  _BottomRightGround: {x: -0.49, y: 0.49}
   _HitSfx: {fileID: 8300000, guid: dd499e622d4355f4bb614261a9fc9829, type: 3}
   _DeathSfx: {fileID: 8300000, guid: 64ce1d0bf35421e42bf46e8e7de490cf, type: 3}
   _DeathParticle: {fileID: 6469926728737050199, guid: 6f8356491f418e44a8ab5555b0de797b, type: 3}

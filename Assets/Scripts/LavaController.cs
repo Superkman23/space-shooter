@@ -8,6 +8,7 @@ public class LavaController : MonoBehaviour {
     GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
     foreach (var player in players) {
       player.GetComponent<Player> ()._MidairJump = false;
+      player.GetComponent<Rigidbody2D> ().gravityScale = 1;
     }
   }
 

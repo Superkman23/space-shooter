@@ -22,6 +22,7 @@ public class Player : MonoBehaviour, IHealth {
   [SerializeField] float _JumpDelay;
   float _JumpDelayR;
   bool _WantToJump;
+  bool _IsGrounded = false;
 
   [SerializeField] LayerMask _WhatIsGround;
   [SerializeField] Vector2 _TopLeftGround;
@@ -76,7 +77,7 @@ public class Player : MonoBehaviour, IHealth {
 
   void HandleMovement (Vector2 input) {
     if (input.y > 0) {
-      if ((IsGrounded () || _MidairJump) && (_JumpDelayR <= 0 || _WantToJump)) {
+      if ((_IsGrounded || _MidairJump) && (_JumpDelayR <= 0 || _WantToJump)) {
         Jump ();
         _JumpDelayR = _JumpDelay;
         _WantToJump = false;
@@ -95,7 +96,6 @@ public class Player : MonoBehaviour, IHealth {
   void Jump () {
     _Rigidbody.velocity = new Vector2 (_Rigidbody.velocity.x, 10);
   }
-  bool IsGrounded () => Physics2D.OverlapArea (_TopLeftGround + (Vector2) transform.position, _BottomRightGround + (Vector2) transform.position, _WhatIsGround);
 
   enum InputType {
     Hold,
@@ -197,7 +197,30 @@ public class Player : MonoBehaviour, IHealth {
     return input;
   }
 
-  void Die () {
+  private void CheckIfGrounded () {
+    //We raycast down 1 pixel from this position to check for a collider
+    Vector2 positionToCheck = transform.position;
+    RaycastHit2D[] hits = Physics2D.RaycastAll (positionToCheck, Vector2.down, 1, _WhatIsGround);
+
+    //if a collider was hit, we are grounded
+    if (hits.Length > 0) {
+      _IsGrounded = true;
+    }
+  }
+
+  private void OnCollisionEnter2D (Collision2D collision) {
+    CheckIfGrounded ();
+  }
+
+  private void OnCollisionStay2D (Collision2D collision) {
+    CheckIfGrounded ();
+  }
+
+  private void OnCollisionExit2D (Collision2D collision) {
+    _IsGrounded = false;
+  }
+
+  public void Die () {
     AudioSource.PlayClipAtPoint (_DeathSfx, transform.position);
     GameController._Instance.PlayerDeath (this);
 

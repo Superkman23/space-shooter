@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour {
   [SerializeField] List<Transform> _PlayerSpawnPositions = new List<Transform> ();
 
   public static GameController _Instance = null;
-  List<Player> _Players = new List<Player> ();
+  public List<Player> _Players = new List<Player> ();
 
   void Awake () {
     _Instance = this;
