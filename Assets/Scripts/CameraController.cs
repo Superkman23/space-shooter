@@ -9,11 +9,6 @@ public class CameraController : MonoBehaviour {
   [SerializeField] Vector2 _MinMaxY = new Vector2 (0, 10);
   [SerializeField] Vector2 _MinMaxX = new Vector2 (-5, 5);
   [SerializeField] float _PositionSmoothing = 5;
-  Camera _Camera = null;
-
-  void Awake () {
-    _Camera = GetComponent<Camera> ();
-  }
 
   void Update () {
     Vector2 _Midpoint = Vector2.zero;
