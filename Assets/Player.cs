@@ -119,8 +119,8 @@ public class Player : MonoBehaviour, IHealth {
   }
 
   // Health interface implementation
-  public int GetHealth() => _Health;
-  public void SetHealth(int value) => _Health = value;
-  public void AddHealth(int amount) => SetHealth(GetHealth() + amount);
-  public void TakeHealth(int amount) => SetHealth(GetHealth() - amount);
+  public int GetHealth () => _Health;
+  public void SetHealth (int value) => _Health = value;
+  public void AddHealth (int amount) => SetHealth (GetHealth () + amount);
+  public void TakeHealth (int amount) => SetHealth (GetHealth () - amount);
 }
