@@ -1,15 +1,19 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.U2D.Path.GUIFramework;
 using UnityEngine;
 
-public class Player : MonoBehaviour
-{
+public class Player : MonoBehaviour {
   Rigidbody2D _Rigidbody;
   SpriteRenderer _Renderer;
 
+  public enum Direction {
+    Left,
+    Right
+  }
 
-
-  int _Direction; //1 = right
+  [HideInInspector]
+  public Direction _Direction = Direction.Left;
   [SerializeField] ControlLayout _Layout = 0;
   [SerializeField] float _MaxSpeed;
   [SerializeField] float _Acceleration;
@@ -23,114 +27,92 @@ public class Player : MonoBehaviour
   [SerializeField] Vector2 _TopLeftGround;
   [SerializeField] Vector2 _BottomRightGround;
 
-  public enum ControlLayout
-  {
+  public enum ControlLayout {
     WASD,
     Arrows
   }
 
-  private void Awake()
-  {
-    _Rigidbody = GetComponent<Rigidbody2D>();
-    _Renderer = GetComponent<SpriteRenderer>();
+  private void Awake () {
+    _Rigidbody = GetComponent<Rigidbody2D> ();
+    _Renderer = GetComponent<SpriteRenderer> ();
   }
 
-  private void FixedUpdate()
-  {
-    Vector2 input = GetInput(_Layout);
+  private void FixedUpdate () {
+    Vector2 input = GetInput ();
 
-    HandleMovement(input);
-
-
+    HandleMovement (input);
 
     _JumpDelayR -= Time.deltaTime;
 
     _Rigidbody.velocity += _VelocityChange;
     _VelocityChange = Vector2.zero;
 
-    if(input.x > 0){
-      _Direction = 0;
-    } else if(input.x < 0)  {
-      _Direction = 1;
+    if (input.x > 0) {
+      _Direction = Direction.Left;
     }
-    transform.rotation = Quaternion.Euler(0, _Direction * 180, 0);
+    else if (input.x < 0) {
+      _Direction = Direction.Right;
+    }
+
+    transform.rotation = Quaternion.Euler (0, (int) _Direction * 180, 0);
   }
 
-  void HandleMovement(Vector2 input)
-  {
-    if(input.y > 0)
-    {
-      if ((IsGrounded() || _MidairJump) && _JumpDelayR <= 0)
-      {
-        Jump();
+  void HandleMovement (Vector2 input) {
+    if (input.y > 0) {
+      if ((IsGrounded () || _MidairJump) && _JumpDelayR <= 0) {
+        Jump ();
         _JumpDelayR = _JumpDelay;
       }
     }
-
-
 
     float target = input.x * _MaxSpeed;
 
     target -= _Rigidbody.velocity.x;
 
     float acceleration = _Acceleration * Time.deltaTime;
-    target = Mathf.Clamp(target, -acceleration, acceleration);
+    target = Mathf.Clamp (target, -acceleration, acceleration);
     _VelocityChange.x = target;
   }
 
-  void Jump()
-  {
-    _Rigidbody.velocity = new Vector2(_Rigidbody.velocity.x, 10);
+  void Jump () {
+    _Rigidbody.velocity = new Vector2 (_Rigidbody.velocity.x, 10);
   }
-  bool IsGrounded() => Physics2D.OverlapArea(_TopLeftGround + (Vector2)transform.position, _BottomRightGround + (Vector2)transform.position, _WhatIsGround);
+  bool IsGrounded () => Physics2D.OverlapArea (_TopLeftGround + (Vector2) transform.position, _BottomRightGround + (Vector2) transform.position, _WhatIsGround);
 
-
-
-  Vector2 GetInput(ControlLayout layout)
-  {
+  Vector2 GetInput () {
     Vector2 input = Vector2.zero;
-    switch ((int)_Layout)
-    {
-      case 0:
-        if (Input.GetKey(KeyCode.W))
-        {
+    switch (_Layout) {
+      case ControlLayout.WASD:
+        if (Input.GetKey (KeyCode.W)) {
           input.y++;
         }
-        if (Input.GetKey(KeyCode.S))
-        {
+        if (Input.GetKey (KeyCode.S)) {
           input.y--;
         }
-        if (Input.GetKey(KeyCode.D))
-        {
+        if (Input.GetKey (KeyCode.D)) {
           input.x++;
         }
-        if (Input.GetKey(KeyCode.A))
-        {
+        if (Input.GetKey (KeyCode.A)) {
           input.x--;
         }
         break;
 
+      case ControlLayout.Arrows:
       default:
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
+        if (Input.GetKey (KeyCode.UpArrow)) {
           input.y++;
         }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
+        if (Input.GetKey (KeyCode.DownArrow)) {
           input.y--;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
+        if (Input.GetKey (KeyCode.RightArrow)) {
           input.x++;
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
+        if (Input.GetKey (KeyCode.LeftArrow)) {
           input.x--;
         }
         break;
-
     }
     return input;
   }
-
 }
