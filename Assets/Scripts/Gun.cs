@@ -39,7 +39,7 @@ public class Gun : MonoBehaviour, IPickup, IEntitySpawn {
       OnPickup (other.gameObject);
     }
 
-    if (_Thrown && other != _Collider) {
+    if (_Thrown && other != _Collider && other.GetComponent<Gun>() == null) {
       // Try hit something, if nothing then just destroy itself
       var health = other.GetComponent<IHealth> ();
       health?.TakeHealth (_ThrownDamage);
@@ -80,6 +80,7 @@ public class Gun : MonoBehaviour, IPickup, IEntitySpawn {
     transform.parent = null;
 
     // Throw the gun
+    _Collider.enabled = true;
     _Rigidbody.isKinematic = false;
     transform.position += Vector3.right * -direction / 2;
     _Rigidbody.AddForce (Vector3.right * -direction * _BulletForce, ForceMode2D.Impulse);
@@ -105,6 +106,7 @@ public class Gun : MonoBehaviour, IPickup, IEntitySpawn {
     controller._Holding = this;
 
     _State = PickupState.PickedUp;
+    _Collider.enabled = false;
 
     transform.parent = who.transform;
     _Parent._Rigidbody = who.GetComponent<Rigidbody2D> ();
