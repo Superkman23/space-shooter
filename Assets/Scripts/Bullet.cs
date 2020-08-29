@@ -28,6 +28,10 @@ public class Bullet : MonoBehaviour {
       }
     }
 
+    if (collision.CompareTag ("Bullet")) {
+      return;
+    }
+
     var health = collision.GetComponent<IHealth> ();
     health?.TakeHealth (_Damage);
 
