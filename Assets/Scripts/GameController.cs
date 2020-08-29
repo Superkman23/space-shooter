@@ -20,14 +20,9 @@ public class GameController : MonoBehaviour {
     // Assign the player numbers
     int maxPlayerCount = SettingsController._PlayerCount;
     GameObject[] players = new GameObject[maxPlayerCount];
-    if (maxPlayerCount == 2) {
-      players[0] = Instantiate (_PlayerPrefabs[0], _PlayerSpawnPositions[0].position, Quaternion.identity);
-      players[1] = Instantiate (_PlayerPrefabs[1], _PlayerSpawnPositions[1].position, Quaternion.identity);
-    }
-    else {
-      players[0] = Instantiate (_PlayerPrefabs[0], _PlayerSpawnPositions[0].position, Quaternion.identity);
-      players[1] = Instantiate (_PlayerPrefabs[1], _PlayerSpawnPositions[1].position, Quaternion.identity);
-      players[2] = Instantiate (_PlayerPrefabs[2], _PlayerSpawnPositions[2].position, Quaternion.identity);
+    for (int i = 0; i < maxPlayerCount; i++)
+    {
+      players[i] = Instantiate(_PlayerPrefabs[0], _PlayerSpawnPositions[0].position, Quaternion.identity);
     }
 
     _CameraController._Targets = new List<Transform> (players.Length);
