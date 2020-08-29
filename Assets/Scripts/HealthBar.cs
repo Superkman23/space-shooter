@@ -6,11 +6,9 @@ public class HealthBar : MonoBehaviour {
   [SerializeField] Vector2 _PositionOffset = Vector2.up;
   Image _Image;
 
-  private void Awake()
-  {
-    _Image = GetComponent<Image>();
+  private void Awake () {
+    _Image = GetComponent<Image> ();
   }
-
 
   // Update is called once per frame
   void Update () {

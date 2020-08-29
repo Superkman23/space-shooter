@@ -114,7 +114,7 @@ public class Player : MonoBehaviour, IHealth {
             input.x--;
           }
         }
-        else if(_Layout == ControlLayout.Arrows){
+        else if (_Layout == ControlLayout.Arrows) {
           if (Input.GetKey (KeyCode.UpArrow)) {
             input.y++;
           }
@@ -128,22 +128,17 @@ public class Player : MonoBehaviour, IHealth {
             input.x--;
           }
         }
-        else
-        {
-          if (Input.GetKey(KeyCode.I))
-          {
+        else {
+          if (Input.GetKey (KeyCode.I)) {
             input.y++;
           }
-          if (Input.GetKey(KeyCode.K))
-          {
+          if (Input.GetKey (KeyCode.K)) {
             input.y--;
           }
-          if (Input.GetKey(KeyCode.L))
-          {
+          if (Input.GetKey (KeyCode.L)) {
             input.x++;
           }
-          if (Input.GetKey(KeyCode.J))
-          {
+          if (Input.GetKey (KeyCode.J)) {
             input.x--;
           }
         }
@@ -163,8 +158,7 @@ public class Player : MonoBehaviour, IHealth {
             input.x--;
           }
         }
-        else if (_Layout == ControlLayout.Arrows)
-        {
+        else if (_Layout == ControlLayout.Arrows) {
           if (Input.GetKeyDown (KeyCode.UpArrow)) {
             input.y++;
           }
@@ -178,22 +172,17 @@ public class Player : MonoBehaviour, IHealth {
             input.x--;
           }
         }
-        else
-        {
-          if (Input.GetKeyDown(KeyCode.I))
-          {
+        else {
+          if (Input.GetKeyDown (KeyCode.I)) {
             input.y++;
           }
-          if (Input.GetKeyDown(KeyCode.K))
-          {
+          if (Input.GetKeyDown (KeyCode.K)) {
             input.y--;
           }
-          if (Input.GetKeyDown(KeyCode.L))
-          {
+          if (Input.GetKeyDown (KeyCode.L)) {
             input.x++;
           }
-          if (Input.GetKeyDown(KeyCode.J))
-          {
+          if (Input.GetKeyDown (KeyCode.J)) {
             input.x--;
           }
         }

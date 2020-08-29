@@ -39,7 +39,7 @@ public class Gun : MonoBehaviour, IPickup, IEntitySpawn {
       OnPickup (other.gameObject);
     }
 
-    if (_Thrown && other != _Collider && other.GetComponent<Gun>() == null) {
+    if (_Thrown && other != _Collider && other.GetComponent<Gun> () == null) {
       // Try hit something, if nothing then just destroy itself
       var health = other.GetComponent<IHealth> ();
       health?.TakeHealth (_ThrownDamage);
