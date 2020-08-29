@@ -42,7 +42,6 @@ public class PhysicsLink : NetworkBehaviour
   {
     _Rigidbody.AddForce(force, FMode);
     CmdApplyForce(force, FMode);
-
   }
   public void AddDirectForce(Vector2 force)//apply force on the client-side to reduce the appearance of lag and then apply it on the server-side
   {
@@ -53,7 +52,7 @@ public class PhysicsLink : NetworkBehaviour
   [Command]
   public void CmdApplyForce(Vector2 force, ForceMode2D FMode)
   {
-    _Rigidbody.AddForce(force, FMode);//apply the force on the server side
+    _Rigidbody.AddForce(force, FMode); //apply the force on the server side
   }
   [Command]
   public void CmdAddDirectForce(Vector2 force)

@@ -5,9 +5,10 @@ public class Player : NetworkBehaviour
 {
   PhysicsLink _Link;
 
-  [Header("Sprites")]
+  [Header("Visuals")]
   [SerializeField] Sprite _RedSprite;
   [SerializeField] Sprite _BlueSprite;
+  [SerializeField] ParticleSystem _JetpackParticles;
   SpriteRenderer _Renderer;
 
   [Header("Movement")]
@@ -47,6 +48,11 @@ public class Player : NetworkBehaviour
     if(input.y > 0)
     {
       RpcJump();
+      RPCJetpackParticles(true);
+    }
+    else
+    {
+      RPCJetpackParticles(false);
     }
 
 
@@ -77,6 +83,22 @@ public class Player : NetworkBehaviour
     else if (input < 0)
     {
       transform.rotation = Quaternion.Euler(0, 180, 0);
+    }
+  }
+  [ClientRpc]
+  void RPCJetpackParticles(bool active)
+  {
+    DoJetpackParticles(active);
+  }
+  void DoJetpackParticles(bool active)
+  {
+    if (active)
+    {
+      _JetpackParticles.Play();
+    }
+    else
+    {
+      _JetpackParticles.Stop();
     }
   }
 
