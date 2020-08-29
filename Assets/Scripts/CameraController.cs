@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour {
 
   void Update () {
     Vector2 _Midpoint = Vector2.zero;
-    for (int i = 0; i < _Targets.Length; i++) {
+    for (int i = 0; i < _Targets.Count; i++) {
       if (_Targets[i] != null) {
         Transform point = _Targets[i];
         _Midpoint.x += point.position.x;
@@ -25,8 +25,8 @@ public class CameraController : MonoBehaviour {
       }
     }
 
-    _Midpoint.x /= _Targets.Length;
-    _Midpoint.y /= _Targets.Length;
+    _Midpoint.x /= _Targets.Count;
+    _Midpoint.y /= _Targets.Count;
 
     // Clamp
     _Midpoint.x = Mathf.Max (_Midpoint.x, _MinMaxX.y);
