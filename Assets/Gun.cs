@@ -11,6 +11,13 @@ public class Gun : MonoBehaviour, IPickup {
   [SerializeField] GameObject _BulletObject = null;
   Rigidbody2D _Rigidbody = null;
 
+  class GunParent {
+    public Collider2D _Collider = null;
+    public Rigidbody2D _Rigidbody = null;
+    public Player _Player = null;
+  }
+  GunParent _Parent = new GunParent ();
+
   // "States"
   // Thrown is when the player throws the gun after running out of ammo - will still do damage to anything that has health
   bool _Thrown = false;
@@ -47,9 +54,10 @@ public class Gun : MonoBehaviour, IPickup {
     _BulletsLeft--;
 
     // Get the direction the player is facing, then instantiate a new bullet and shoot the bullet in that direction
-    int direction = (int) transform.parent.GetComponent<Player> ()._Direction;
+    int direction = (int) _Parent._Player._Direction;
     GameObject newBullet = Instantiate (_BulletObject, transform.position + (Vector3.right * -direction / 1.5f), transform.parent.rotation);
-    newBullet.GetComponent<Rigidbody2D> ().AddForce ((Vector3.right * -direction * _BulletForce), ForceMode2D.Impulse);
+    newBullet.GetComponent<Rigidbody2D> ().velocity = (Vector3.right * -direction * _BulletForce) + (Vector3.right * _Parent._Rigidbody.velocity.x / 2);
+    newBullet.GetComponent<Bullet> ()._Parent = _Parent._Collider;
 
     // Returns true if the gun is empty, in which case the gun is thrown
     return _BulletsLeft == 0;
@@ -57,7 +65,7 @@ public class Gun : MonoBehaviour, IPickup {
 
   public void Throw () {
     // Get the direction the player is facing, then instantiate a new bullet and shoot the bullet in that direction
-    int direction = (int) transform.parent.GetComponent<Player> ()._Direction;
+    int direction = (int) _Parent._Player._Direction;
 
     // Officially throw the gun
     _Thrown = true;
@@ -67,20 +75,31 @@ public class Gun : MonoBehaviour, IPickup {
     _Rigidbody.position += Vector2.right * -direction;
     _Rigidbody.isKinematic = false;
     _Rigidbody.AddForce ((Vector3.right * -direction * _BulletForce), ForceMode2D.Impulse);
+
+    _Parent = null;
   }
 
   public void OnDrop (GameObject who) {
-    _State = PickupState.Dropped;
-
-    transform.parent = null;
+    // NOT USED
   }
 
   public void OnPickup (GameObject who) {
+    PlayerGunController controller = who.GetComponent<PlayerGunController> ();
+    if (controller._Holding != null) {
+      return;
+    }
+
+    transform.rotation = Quaternion.identity;
+
+    controller._Holding = this;
+
     _State = PickupState.PickedUp;
 
-    who.GetComponent<PlayerGunController> ()._Holding = this;
-
     transform.parent = who.transform;
+    _Parent._Rigidbody = who.GetComponent<Rigidbody2D> ();
+    _Parent._Collider = who.GetComponent<Collider2D> ();
+    _Parent._Player = who.GetComponent<Player> ();
+
     transform.localPosition = _OffsetFromPlayer;
   }
 
