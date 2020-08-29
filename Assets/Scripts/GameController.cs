@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour {
 
     // Assign the player numbers
     GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+    _CameraController._Targets = new List<Transform>(players.Length);
     int playerCount = 0;
     foreach (GameObject player in players) {
       Player component = player.GetComponent<Player> ();

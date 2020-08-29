@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
   [HideInInspector]
-  public List<Transform> _Targets = new List<Transform>();
+  public List<Transform> _Targets = null;
   [SerializeField] Vector2 _MinMaxY = new Vector2 (0, 10);
   [SerializeField] Vector2 _MinMaxX = new Vector2 (-5, 5);
   [SerializeField] float _PositionSmoothing = 5;
