@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 
 
 
-  bool _Direction; //true = right
+  int _Direction; //1 = right
   [SerializeField] ControlLayout _Layout = 0;
   [SerializeField] float _MaxSpeed;
   [SerializeField] float _Acceleration;
@@ -49,11 +49,11 @@ public class Player : MonoBehaviour
     _VelocityChange = Vector2.zero;
 
     if(input.x > 0){
-      _Direction = true;
+      _Direction = 0;
     } else if(input.x < 0)  {
-      _Direction = false;
+      _Direction = 1;
     }
-    _Renderer.flipX = !_Direction;
+    transform.rotation = Quaternion.Euler(0, _Direction * 180, 0);
   }
 
   void HandleMovement(Vector2 input)
