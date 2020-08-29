@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
@@ -15,21 +16,21 @@ public class CameraController : MonoBehaviour
 
   void Update()
   {
-    Vector2 _Distance = Vector2.zero;
+    Vector2 _Midpoint = Vector2.zero;
     foreach (var point in _Points)
     {
-      _Distance.x += point.position.x;
-      _Distance.y += point.position.y;
+      _Midpoint.x += point.position.x;
+      _Midpoint.y += point.position.y;
     }
-    _Distance.x /= _Points.Length;
-    _Distance.y /= _Points.Length;
+    _Midpoint.x /= _Points.Length;
+    _Midpoint.y /= _Points.Length;
 
     // Clamp
-    _Distance.x = Mathf.Max(_Distance.x, _MinMaxX.y);
-    _Distance.x = Mathf.Min(_Distance.x, _MinMaxX.x);
-    _Distance.y = Mathf.Max(_Distance.y, _MinMaxY.y);
-    _Distance.y = Mathf.Min(_Distance.y, _MinMaxY.x);
+    _Midpoint.x = Mathf.Max(_Midpoint.x, _MinMaxX.y);
+    _Midpoint.x = Mathf.Min(_Midpoint.x, _MinMaxX.x);
+    _Midpoint.y = Mathf.Max(_Midpoint.y, _MinMaxY.y);
+    _Midpoint.y = Mathf.Min(_Midpoint.y, _MinMaxY.x);
 
-    transform.position = Vector3.Lerp(transform.position, new Vector3(_Distance.x, _Distance.y, -10), _PositionSmoothing * Time.deltaTime);
+    transform.position = Vector3.Lerp(transform.position, new Vector3(_Midpoint.x, _Midpoint.y, -10), _PositionSmoothing * Time.deltaTime);
   }
 }
