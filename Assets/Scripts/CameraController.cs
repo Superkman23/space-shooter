@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour {
-  [SerializeField] Transform[] _Points = new Transform[2];
+  [HideInInspector]
+  public List<Transform> _Targets = new List<Transform>();
   [SerializeField] Vector2 _MinMaxY = new Vector2 (0, 10);
   [SerializeField] Vector2 _MinMaxX = new Vector2 (-5, 5);
   [SerializeField] float _PositionSmoothing = 5;
@@ -15,16 +17,16 @@ public class CameraController : MonoBehaviour {
 
   void Update () {
     Vector2 _Midpoint = Vector2.zero;
-    for (int i = 0; i < _Points.Length; i++) {
-      if (_Points[i] != null) {
-        Transform point = _Points[i];
+    for (int i = 0; i < _Targets.Length; i++) {
+      if (_Targets[i] != null) {
+        Transform point = _Targets[i];
         _Midpoint.x += point.position.x;
         _Midpoint.y += point.position.y;
       }
     }
 
-    _Midpoint.x /= _Points.Length;
-    _Midpoint.y /= _Points.Length;
+    _Midpoint.x /= _Targets.Length;
+    _Midpoint.y /= _Targets.Length;
 
     // Clamp
     _Midpoint.x = Mathf.Max (_Midpoint.x, _MinMaxX.y);

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
   [SerializeField] TextMeshProUGUI _WinningText = null;
+  [SerializeField] CameraController _CameraController = null;
 
   public static GameController _Instance = null;
   List<Player> _Players = new List<Player> ();
@@ -19,6 +20,7 @@ public class GameController : MonoBehaviour {
     foreach (GameObject player in players) {
       Player component = player.GetComponent<Player> ();
       _Players.Add (component);
+      _CameraController._Targets.Add(player.transform);
       component._PlayerNumber = playerCount++;
     }
   }
