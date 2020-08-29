@@ -45,10 +45,7 @@ public class Gun : MonoBehaviour, IPickup
     }
   }
 
-  void DestroyGun()
-  {
-    Destroy(gameObject);
-  }
+  void DestroyGun() => Destroy(gameObject);
 
   public bool Shoot()
   {
