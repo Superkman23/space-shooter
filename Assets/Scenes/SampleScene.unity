@@ -916,7 +916,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.908, y: 0.464}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -965,7 +965,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: c95ffe2cdb603dd4e8ac40778ec7562a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: da173a988aad9d844961e89e1d97b49b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1004,7 +1004,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BulletForce: 10
   _ThrownDamage: 5
-  _OffsetFromPlayer: {x: 0, y: 0}
+  _OffsetFromPlayer: {x: 0.6, y: 0.1}
   _BulletObject: {fileID: 2796747401631870413, guid: 1282ec01b3a611b49bacc43d2b926e08, type: 3}
 --- !u!50 &465829986
 Rigidbody2D:
