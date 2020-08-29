@@ -5,16 +5,13 @@ public class Bullet : MonoBehaviour {
   public Collider2D[] _Ignoring = null;
 
   void OnTriggerEnter2D (Collider2D collision) {
-    foreach (var ignore in _Ignoring)
-    {
-      if (collision == ignore)
-      {
+    foreach (var ignore in _Ignoring) {
+      if (collision == ignore) {
         return;
       }
     }
 
-    if (collision.CompareTag("Bullet"))
-    {
+    if (collision.CompareTag ("Bullet")) {
       return;
     }
 
@@ -25,10 +22,8 @@ public class Bullet : MonoBehaviour {
   }
 
   void OnTriggerStay2D (Collider2D collision) {
-    foreach (var ignore in _Ignoring )
-    {
-      if (collision == ignore)
-      {
+    foreach (var ignore in _Ignoring) {
+      if (collision == ignore) {
         return;
       }
     }

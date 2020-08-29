@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Gun : MonoBehaviour, IPickup {
+public class Gun : MonoBehaviour, IPickup, IEntitySpawn {
   [Header ("Settings")]
   [SerializeField] float _BulletForce = 10;
   [SerializeField] int _ThrownDamage = 5;
@@ -60,15 +60,13 @@ public class Gun : MonoBehaviour, IPickup {
       GameObject newBullet = Instantiate (_BulletObject, transform.position + (Vector3.right * -direction / 1.5f), transform.parent.rotation);
       newBullet.GetComponent<Rigidbody2D> ().velocity = (Vector3.right * -direction * _BulletForce) + (Vector3.right * _Parent._Rigidbody.velocity.x / 2);
       newBullet.GetComponent<Bullet> ()._Ignoring = new Collider2D[2] { _Parent._Collider, _Collider };
-
     }
 
-    if (!_UnlimitedAmmo)
-    { 
-    // Shoot one of the bullets in the magazine
-    _ClipSize--;
+    if (!_UnlimitedAmmo) {
+      // Shoot one of the bullets in the magazine
+      _ClipSize--;
     }
-    
+
     // Returns true if the gun is empty, in which case the gun is thrown
     return _ClipSize < 0;
   }
@@ -99,6 +97,11 @@ public class Gun : MonoBehaviour, IPickup {
       return;
     }
 
+    // Special case: when the gun is spawned through an entity spawner
+    if (_SpawnerParent != null) {
+      OnLeaveSpawn ();
+    }
+
     controller._Holding = this;
 
     _State = PickupState.PickedUp;
@@ -114,5 +117,13 @@ public class Gun : MonoBehaviour, IPickup {
 
   public PickupState GetPickupState () {
     return _State;
+  }
+
+  EntitySpawner _SpawnerParent = null;
+  // Empty on purpose
+  public void OnEnterSpawn (EntitySpawner spawner) { _SpawnerParent = spawner; }
+
+  public void OnLeaveSpawn () {
+    _SpawnerParent.ObjectLeaveSpawn ();
   }
 }
