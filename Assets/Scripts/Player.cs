@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IHealth {
   Rigidbody2D _Rigidbody;
-  SpriteRenderer _Renderer;
 
   public enum Direction {
     Left = -1,
@@ -25,7 +24,10 @@ public class Player : MonoBehaviour, IHealth {
   [SerializeField] Vector2 _TopLeftGround;
   [SerializeField] Vector2 _BottomRightGround;
 
-  int _Health = 100;
+  [Header ("Components")]
+  [SerializeField] ParticleSystem _DeathParticle = null;
+
+  int _Health = 30;
 
   public enum ControlLayout {
     WASD,
@@ -34,20 +36,16 @@ public class Player : MonoBehaviour, IHealth {
 
   private void Awake () {
     _Rigidbody = GetComponent<Rigidbody2D> ();
-    _Renderer = GetComponent<SpriteRenderer> ();
   }
 
-  private void Update()
-  {
-    if (!_WantToJump)
-    {
-      _WantToJump = GetInput(InputType.Down).y > 0;
+  private void Update () {
+    if (!_WantToJump) {
+      _WantToJump = GetInput (InputType.Down).y > 0;
     }
   }
 
-
   private void FixedUpdate () {
-    Vector2 input = GetInput(InputType.Hold);
+    Vector2 input = GetInput (InputType.Hold);
 
     HandleMovement (input);
 
@@ -89,93 +87,70 @@ public class Player : MonoBehaviour, IHealth {
   }
   bool IsGrounded () => Physics2D.OverlapArea (_TopLeftGround + (Vector2) transform.position, _BottomRightGround + (Vector2) transform.position, _WhatIsGround);
 
-
-  enum InputType
-  {
+  enum InputType {
     Hold,
     Down
   }
   Vector2 GetInput (InputType inputType) {
     Vector2 input = Vector2.zero;
 
-    switch (inputType)
-    {
+    switch (inputType) {
       case InputType.Hold:
-        if(_Layout == ControlLayout.WASD)
-        {
-          if (Input.GetKey(KeyCode.W))
-          {
+        if (_Layout == ControlLayout.WASD) {
+          if (Input.GetKey (KeyCode.W)) {
             input.y++;
           }
-          if (Input.GetKey(KeyCode.S))
-          {
+          if (Input.GetKey (KeyCode.S)) {
             input.y--;
           }
-          if (Input.GetKey(KeyCode.D))
-          {
+          if (Input.GetKey (KeyCode.D)) {
             input.x++;
           }
-          if (Input.GetKey(KeyCode.A))
-          {
+          if (Input.GetKey (KeyCode.A)) {
             input.x--;
           }
         }
-        else
-        {
-          if (Input.GetKey(KeyCode.UpArrow))
-          {
+        else {
+          if (Input.GetKey (KeyCode.UpArrow)) {
             input.y++;
           }
-          if (Input.GetKey(KeyCode.DownArrow))
-          {
+          if (Input.GetKey (KeyCode.DownArrow)) {
             input.y--;
           }
-          if (Input.GetKey(KeyCode.RightArrow))
-          {
+          if (Input.GetKey (KeyCode.RightArrow)) {
             input.x++;
           }
-          if (Input.GetKey(KeyCode.LeftArrow))
-          {
+          if (Input.GetKey (KeyCode.LeftArrow)) {
             input.x--;
           }
         }
         break;
       case InputType.Down:
-        if (_Layout == ControlLayout.WASD)
-        {
-          if (Input.GetKeyDown(KeyCode.W))
-          {
+        if (_Layout == ControlLayout.WASD) {
+          if (Input.GetKeyDown (KeyCode.W)) {
             input.y++;
           }
-          if (Input.GetKeyDown(KeyCode.S))
-          {
+          if (Input.GetKeyDown (KeyCode.S)) {
             input.y--;
           }
-          if (Input.GetKeyDown(KeyCode.D))
-          {
+          if (Input.GetKeyDown (KeyCode.D)) {
             input.x++;
           }
-          if (Input.GetKeyDown(KeyCode.A))
-          {
+          if (Input.GetKeyDown (KeyCode.A)) {
             input.x--;
           }
         }
-        else
-        {
-          if (Input.GetKeyDown(KeyCode.UpArrow))
-          {
+        else {
+          if (Input.GetKeyDown (KeyCode.UpArrow)) {
             input.y++;
           }
-          if (Input.GetKeyDown(KeyCode.DownArrow))
-          {
+          if (Input.GetKeyDown (KeyCode.DownArrow)) {
             input.y--;
           }
-          if (Input.GetKeyDown(KeyCode.RightArrow))
-          {
+          if (Input.GetKeyDown (KeyCode.RightArrow)) {
             input.x++;
           }
-          if (Input.GetKeyDown(KeyCode.LeftArrow))
-          {
+          if (Input.GetKeyDown (KeyCode.LeftArrow)) {
             input.x--;
           }
         }
@@ -187,6 +162,13 @@ public class Player : MonoBehaviour, IHealth {
   // Health interface implementation
   public int GetHealth () => _Health;
   public void SetHealth (int value) => _Health = value;
-  public void AddHealth (int amount) => SetHealth (GetHealth () + amount);
-  public void TakeHealth (int amount) => SetHealth (GetHealth () - amount);
+  public void AddHealth (int amount) => _Health += amount;
+  public void TakeHealth (int amount) {
+    _Health -= amount;
+
+    if (_Health <= 0) {
+      Instantiate (_DeathParticle, transform.position, Quaternion.identity);
+      Destroy (gameObject);
+    }
+  }
 }

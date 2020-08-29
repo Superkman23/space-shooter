@@ -28,18 +28,17 @@ public class Gun : MonoBehaviour, IPickup {
     _Rigidbody = GetComponent<Rigidbody2D> ();
     _Rigidbody.isKinematic = true;
 
-    _Collider = GetComponent<Collider2D>();
+    _Collider = GetComponent<Collider2D> ();
   }
 
-  void OnTriggerStay2D(Collider2D other)
-  {
+  void OnTriggerStay2D (Collider2D other) {
     // If the thing colliding is the player
     if (other.CompareTag ("Player") && _State == PickupState.Dropped) {
       // Trigger the pickup event
       OnPickup (other.gameObject);
     }
 
-    if (_Thrown && other != _Collider ) {
+    if (_Thrown && other != _Collider) {
       // Try hit something, if nothing then just destroy itself
       var health = other.GetComponent<IHealth> ();
       health?.TakeHealth (_ThrownDamage);
@@ -54,13 +53,12 @@ public class Gun : MonoBehaviour, IPickup {
   void DestroyGun () => Destroy (gameObject);
 
   public bool Shoot () {
-    if(_ClipSize > 0)
-    {
+    if (_ClipSize > 0) {
       // Get the direction the player is facing, then instantiate a new bullet and shoot the bullet in that direction
-      int direction = (int)_Parent._Player._Direction;
-      GameObject newBullet = Instantiate(_BulletObject, transform.position + (Vector3.right * -direction / 1.5f), transform.parent.rotation);
-      newBullet.GetComponent<Rigidbody2D>().velocity = (Vector3.right * -direction * _BulletForce) + (Vector3.right * _Parent._Rigidbody.velocity.x / 2);
-      newBullet.GetComponent<Bullet>()._Parent = _Parent._Collider;
+      int direction = (int) _Parent._Player._Direction;
+      GameObject newBullet = Instantiate (_BulletObject, transform.position + (Vector3.right * -direction / 1.5f), transform.parent.rotation);
+      newBullet.GetComponent<Rigidbody2D> ().velocity = (Vector3.right * -direction * _BulletForce) + (Vector3.right * _Parent._Rigidbody.velocity.x / 2);
+      newBullet.GetComponent<Bullet> ()._Parent = _Parent._Collider;
 
     }
     // Shoot one of the bullets in the magazine
