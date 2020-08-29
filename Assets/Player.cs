@@ -5,7 +5,11 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
   Rigidbody2D _Rigidbody;
-  bool _Direction; //true = right
+  SpriteRenderer _Renderer;
+
+
+
+  int _Direction; //1 = right
   [SerializeField] ControlLayout _Layout = 0;
   [SerializeField] float _MaxSpeed;
   [SerializeField] float _Acceleration;
@@ -28,11 +32,14 @@ public class Player : MonoBehaviour
   private void Awake()
   {
     _Rigidbody = GetComponent<Rigidbody2D>();
+    _Renderer = GetComponent<SpriteRenderer>();
   }
 
   private void FixedUpdate()
   {
-    HandleMovement();
+    Vector2 input = GetInput(_Layout);
+
+    HandleMovement(input);
 
 
 
@@ -41,18 +48,16 @@ public class Player : MonoBehaviour
     _Rigidbody.velocity += _VelocityChange;
     _VelocityChange = Vector2.zero;
 
-    if(_Rigidbody.velocity.x > 0){
-      _Direction = true;
-    } else if(_Rigidbody.velocity.x < 0)  {
-      _Direction = false;
+    if(input.x > 0){
+      _Direction = 0;
+    } else if(input.x < 0)  {
+      _Direction = 1;
     }
-
+    transform.rotation = Quaternion.Euler(0, _Direction * 180, 0);
   }
 
-  void HandleMovement()
+  void HandleMovement(Vector2 input)
   {
-    Vector2 input = GetInput(_Layout);
-
     if(input.y > 0)
     {
       if ((IsGrounded() || _MidairJump) && _JumpDelayR <= 0)
