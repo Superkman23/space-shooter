@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour {
     GameObject[] players = new GameObject[maxPlayerCount];
     for (int i = 0; i < maxPlayerCount; i++)
     {
-      players[i] = Instantiate(_PlayerPrefabs[0], _PlayerSpawnPositions[0].position, Quaternion.identity);
+      players[i] = Instantiate(_PlayerPrefabs[i], _PlayerSpawnPositions[i].position, Quaternion.identity);
     }
 
     _CameraController._Targets = new List<Transform> (players.Length);
