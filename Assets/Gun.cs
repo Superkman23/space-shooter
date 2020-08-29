@@ -21,7 +21,7 @@ public class Gun : MonoBehaviour, IPickup {
 
     _BulletsLeft--;
     GameObject newBullet = Instantiate (_BulletObject, transform.position, transform.parent.rotation);
-    newBullet.GetComponent<Rigidbody2D> ().AddForce (Vector3.right * ((int)transform.parent.GetComponent<Player>()._Direction) * 100);
+    newBullet.GetComponent<Rigidbody2D> ().AddForce (Vector3.right * -((int)transform.parent.GetComponent<Player>()._Direction) * 10, ForceMode2D.Impulse);
 
     return _BulletsLeft == 0;
   }
