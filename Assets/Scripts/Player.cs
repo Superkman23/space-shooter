@@ -38,6 +38,8 @@ public class Player : NetworkBehaviour
 
     velocityChange.x = force;
 
+    RpcFlip(input.x);
+
     // Jumping
     if(input.y > 0)
     {
@@ -61,7 +63,18 @@ public class Player : NetworkBehaviour
       _Link.AddDirectForce(Vector2.up);
   }
 
-
+  [ClientRpc]
+  void RpcFlip(float input)
+  {
+    if (input > 0)
+    {
+      transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+    else if (input < 0)
+    {
+      transform.rotation = Quaternion.Euler(0, 180, 0);
+    }
+  }
 
 
   Vector2 GetInput()
