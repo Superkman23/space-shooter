@@ -18,7 +18,7 @@ public class Player : MonoBehaviour, IHealth {
   [SerializeField] float _Acceleration;
   Vector2 _VelocityChange;
 
-  [SerializeField] bool _MidairJump;
+  public bool _MidairJump;
   [SerializeField] float _JumpDelay;
   float _JumpDelayR;
   bool _WantToJump;
@@ -197,19 +197,23 @@ public class Player : MonoBehaviour, IHealth {
     return input;
   }
 
+  void Die () {
+    AudioSource.PlayClipAtPoint (_DeathSfx, transform.position);
+    GameController._Instance.PlayerDeath (this);
+
+    Instantiate (_DeathParticle, transform.position, Quaternion.identity);
+    Destroy (gameObject);
+  }
+
   // Health interface implementation
   public int GetHealth () => _Health;
-  public void SetHealth (int value) => _Health = value;
+  public void SetHealth (int value) { _Health = value; if (value == 0) { Die (); } }
   public void AddHealth (int amount) => _Health += amount;
   public void TakeHealth (int amount) {
     _Health -= amount;
 
     if (_Health <= 0) {
-      AudioSource.PlayClipAtPoint (_DeathSfx, transform.position);
-      GameController._Instance.PlayerDeath (this);
-
-      Instantiate (_DeathParticle, transform.position, Quaternion.identity);
-      Destroy (gameObject);
+      Die ();
     }
     else {
       _Source.PlayOneShot (_HitSfx);

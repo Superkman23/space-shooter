@@ -13,16 +13,14 @@ public class GameController : MonoBehaviour {
   public static GameController _Instance = null;
   List<Player> _Players = new List<Player> ();
 
-  // Start is called before the first frame update
-  void Start () {
+  void Awake () {
     _Instance = this;
 
     // Assign the player numbers
     int maxPlayerCount = SettingsController._PlayerCount;
     GameObject[] players = new GameObject[maxPlayerCount];
-    for (int i = 0; i < maxPlayerCount; i++)
-    {
-      players[i] = Instantiate(_PlayerPrefabs[i], _PlayerSpawnPositions[i].position, Quaternion.identity);
+    for (int i = 0; i < maxPlayerCount; i++) {
+      players[i] = Instantiate (_PlayerPrefabs[i], _PlayerSpawnPositions[i].position, Quaternion.identity);
     }
 
     _CameraController._Targets = new List<Transform> (players.Length);
