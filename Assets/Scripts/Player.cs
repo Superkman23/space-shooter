@@ -4,14 +4,17 @@ using Mirror;
 public class Player : NetworkBehaviour
 {
   SpriteRenderer _Renderer;
+  PhysicsLink _Link;
   [SerializeField] Sprite _RedSprite;
   [SerializeField] Sprite _BlueSprite;
 
   [SerializeField] float _MoveSpeed;
 
-  void Awake()
+  void Start()
   {
+    _Link = GetComponent<PhysicsLink>();
     _Renderer = GetComponent<SpriteRenderer>();
+    _Renderer.sprite = hasAuthority ? _BlueSprite : _RedSprite;
   }
   [Client]
   void FixedUpdate()
@@ -29,7 +32,7 @@ public class Player : NetworkBehaviour
   [ClientRpc]
   void RpcRunInput(Vector2 input)
   {
-    transform.Translate(input * _MoveSpeed);
+    _Link.ApplyForce(input * _MoveSpeed, ForceMode2D.Impulse);
   }
 
 

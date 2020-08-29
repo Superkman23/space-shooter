@@ -11,13 +11,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level_1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
-    path: Assets/Mirror/Examples/RigidbodyPhysics/Scenes/BounceScene.unity
-    guid: b42449e4a64f03a42b999b0c118df11b
-  - enabled: 0
-    path: Assets/Scenes/Networking_Scene.unity
-    guid: 48cf20bc18cad2f4e9f992b68581cad8
-  - enabled: 0
-    path: Assets/Mirror/Examples/Chat/Scenes/Main.unity
-    guid: f4e8d4de4484e44bba666f2d1f66c73e
   m_configObjects: {}
