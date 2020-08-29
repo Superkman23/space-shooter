@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4086809743741774110}
   - component: {fileID: 4086809743741774113}
   - component: {fileID: 4086809743741774112}
-  - component: {fileID: 4086809743741774111}
   - component: {fileID: 4086809743741774108}
   - component: {fileID: 1110153346}
+  - component: {fileID: -2853104728574698962}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -112,28 +112,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &4086809743741774111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4086809743741774115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6793670910e860146b43529dd9853411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _BulletForce: 25
-  _ThrownDamage: 10
-  _OffsetFromPlayer: {x: 0.6, y: 0.1}
-  _ClipSize: 10
-  _UnlimitedAmmo: 0
-  _ShootSfx: {fileID: 8300000, guid: d331b0e696fd50445bdaa0add11ec685, type: 3}
-  _PickupSfx: {fileID: 8300000, guid: 7cc8122c53a65d44b92b88498ee99d6e, type: 3}
-  _ThrowSfx: {fileID: 8300000, guid: be51d0af73e7e9541b4a50072c57b7fb, type: 3}
-  _ThrowCollideSfx: {fileID: 8300000, guid: effc82407efd9394b94ba683b7b5733c, type: 3}
-  _BulletObject: {fileID: 2796747401631870413, guid: 1282ec01b3a611b49bacc43d2b926e08, type: 3}
 --- !u!50 &4086809743741774108
 Rigidbody2D:
   serializedVersion: 4
@@ -251,3 +229,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-2853104728574698962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4086809743741774115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
