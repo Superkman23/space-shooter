@@ -5,7 +5,7 @@ public class Gun : MonoBehaviour, IPickup {
   [SerializeField] float _BulletForce = 10;
   [SerializeField] int _ThrownDamage = 5;
   [SerializeField] Vector2 _OffsetFromPlayer = Vector2.zero;
-  int _BulletsLeft = 10;
+  [SerializeField] int _ClipSize = 10;
 
   [Header ("Components")]
   [SerializeField] GameObject _BulletObject = null;
@@ -39,7 +39,7 @@ public class Gun : MonoBehaviour, IPickup {
       OnPickup (other.gameObject);
     }
 
-    if (_Thrown && other != _Collider) {
+    if (_Thrown && other != _Collider ) {
       // Try hit something, if nothing then just destroy itself
       var health = other.GetComponent<IHealth> ();
       health?.TakeHealth (_ThrownDamage);
@@ -54,17 +54,19 @@ public class Gun : MonoBehaviour, IPickup {
   void DestroyGun () => Destroy (gameObject);
 
   public bool Shoot () {
+    if(_ClipSize > 0)
+    {
+      // Get the direction the player is facing, then instantiate a new bullet and shoot the bullet in that direction
+      int direction = (int)_Parent._Player._Direction;
+      GameObject newBullet = Instantiate(_BulletObject, transform.position + (Vector3.right * -direction / 1.5f), transform.parent.rotation);
+      newBullet.GetComponent<Rigidbody2D>().velocity = (Vector3.right * -direction * _BulletForce) + (Vector3.right * _Parent._Rigidbody.velocity.x / 2);
+      newBullet.GetComponent<Bullet>()._Parent = _Parent._Collider;
+
+    }
     // Shoot one of the bullets in the magazine
-    _BulletsLeft--;
-
-    // Get the direction the player is facing, then instantiate a new bullet and shoot the bullet in that direction
-    int direction = (int) _Parent._Player._Direction;
-    GameObject newBullet = Instantiate (_BulletObject, transform.position + (Vector3.right * -direction / 1.5f), transform.parent.rotation);
-    newBullet.GetComponent<Rigidbody2D> ().velocity = (Vector3.right * -direction * _BulletForce) + (Vector3.right * _Parent._Rigidbody.velocity.x / 2);
-    newBullet.GetComponent<Bullet> ()._Parent = _Parent._Collider;
-
+    _ClipSize--;
     // Returns true if the gun is empty, in which case the gun is thrown
-    return _BulletsLeft == 0;
+    return _ClipSize < 0;
   }
 
   public void Throw () {
@@ -77,7 +79,8 @@ public class Gun : MonoBehaviour, IPickup {
 
     // Throw the gun
     _Rigidbody.isKinematic = false;
-    _Rigidbody.AddForce ((Vector3.right * -direction * _BulletForce), ForceMode2D.Impulse);
+    transform.position += Vector3.right * -direction / 2;
+    _Rigidbody.AddForce (Vector3.right * -direction * _BulletForce, ForceMode2D.Impulse);
 
     _Parent = null;
   }
