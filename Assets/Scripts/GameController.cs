@@ -7,6 +7,9 @@ public class GameController : MonoBehaviour {
   [SerializeField] TextMeshProUGUI _WinningText = null;
   [SerializeField] CameraController _CameraController = null;
 
+  [SerializeField] List<GameObject> _PlayerPrefabs = new List<GameObject>();
+  [SerializeField] List<Transform> _PlayerSpawnPositions = new List<Transform>();
+
   public static GameController _Instance = null;
   List<Player> _Players = new List<Player> ();
 
@@ -15,7 +18,20 @@ public class GameController : MonoBehaviour {
     _Instance = this;
 
     // Assign the player numbers
-    GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+    int maxPlayerCount  = SettingsController._PlayerCount;
+    GameObject[] players = new GameObject[maxPlayerCount];
+    if (maxPlayerCount == 2)
+    {
+      players[0] = Instantiate(_PlayerPrefabs[0], _PlayerSpawnPositions[0].position, Quaternion.identity);
+      players[1] = Instantiate(_PlayerPrefabs[1], _PlayerSpawnPositions[1].position, Quaternion.identity);
+    }
+    else
+    {
+      players[0] = Instantiate(_PlayerPrefabs[0], _PlayerSpawnPositions[0].position, Quaternion.identity);
+      players[1] = Instantiate(_PlayerPrefabs[1], _PlayerSpawnPositions[1].position, Quaternion.identity);
+      players[2] = Instantiate(_PlayerPrefabs[2], _PlayerSpawnPositions[2].position, Quaternion.identity);
+    }
+
     _CameraController._Targets = new List<Transform> (players.Length);
     int playerCount = 0;
     foreach (GameObject player in players) {
