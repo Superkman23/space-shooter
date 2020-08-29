@@ -3,11 +3,14 @@ using Mirror;
 
 public class Player : NetworkBehaviour
 {
-  SpriteRenderer _Renderer;
   PhysicsLink _Link;
+
+  [Header("Sprites")]
   [SerializeField] Sprite _RedSprite;
   [SerializeField] Sprite _BlueSprite;
+  SpriteRenderer _Renderer;
 
+  [Header("Movement")]
   [SerializeField] float _Acceleration;
   [SerializeField] float _MoveSpeed;
 
@@ -51,6 +54,8 @@ public class Player : NetworkBehaviour
     RpcApplyForce(velocityChange);
   }
 
+  #region RPC
+
   [ClientRpc]
   void RpcApplyForce(Vector2 input)
   {
@@ -62,7 +67,6 @@ public class Player : NetworkBehaviour
     if(_Link._Rigidbody.velocity.y < 10)
       _Link.AddDirectForce(Vector2.up);
   }
-
   [ClientRpc]
   void RpcFlip(float input)
   {
@@ -76,6 +80,7 @@ public class Player : NetworkBehaviour
     }
   }
 
+  #endregion
 
   Vector2 GetInput()
   {
