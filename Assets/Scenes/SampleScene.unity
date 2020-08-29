@@ -354,6 +354,7 @@ GameObject:
   - component: {fileID: 130488251}
   - component: {fileID: 130488250}
   - component: {fileID: 130488254}
+  - component: {fileID: 130488255}
   m_Layer: 0
   m_Name: Player_1
   m_TagString: Untagged
@@ -495,6 +496,19 @@ MonoBehaviour:
     m_Bits: 256
   _TopLeftGround: {x: 0.49, y: -0.5}
   _BottomRightGround: {x: -0.49, y: -0.6}
+--- !u!114 &130488255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 130488249}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 925c5728e0eb99f40870055e2d987d10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ShootKey: 115
 --- !u!1 &168897820
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,6 +847,7 @@ GameObject:
   - component: {fileID: 465829984}
   - component: {fileID: 465829983}
   - component: {fileID: 465829982}
+  - component: {fileID: 465829985}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -931,6 +946,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &465829985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465829981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6793670910e860146b43529dd9853411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _BulletObject: {fileID: 2796747401631870413, guid: 1282ec01b3a611b49bacc43d2b926e08, type: 3}
 --- !u!1 &476183014
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,6 +1750,7 @@ GameObject:
   - component: {fileID: 2105416532}
   - component: {fileID: 2105416531}
   - component: {fileID: 2105416530}
+  - component: {fileID: 2105416535}
   m_Layer: 0
   m_Name: Player_2
   m_TagString: Untagged
@@ -1863,3 +1892,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2105416535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105416529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 925c5728e0eb99f40870055e2d987d10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ShootKey: 274
