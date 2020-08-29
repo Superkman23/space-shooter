@@ -8,8 +8,8 @@ public class Player : MonoBehaviour {
   SpriteRenderer _Renderer;
 
   public enum Direction {
-    Left,
-    Right
+    Left = -1,
+    Right = 1
   }
 
   [HideInInspector]
@@ -49,12 +49,12 @@ public class Player : MonoBehaviour {
 
     if (input.x > 0) {
       _Direction = Direction.Left;
+      transform.rotation = Quaternion.Euler(0, 0, 0);
     }
     else if (input.x < 0) {
       _Direction = Direction.Right;
+      transform.rotation = Quaternion.Euler(0, 180, 0);
     }
-
-    transform.rotation = Quaternion.Euler (0, (int) _Direction * 180, 0);
   }
 
   void HandleMovement (Vector2 input) {
