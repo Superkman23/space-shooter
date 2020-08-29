@@ -245,7 +245,7 @@ MonoBehaviour:
   runInBackground: 1
   startOnHeadless: 1
   showDebugMessages: 0
-  serverTickRate: 30
+  serverTickRate: 60
   offlineScene: 
   onlineScene: 
   transport: {fileID: 660277980}
@@ -254,12 +254,10 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 6613006754518757807, guid: 8a4708aea65b2c146b0ab61f9dd96ccc, type: 3}
+  playerPrefab: {fileID: 2746189217327109943, guid: fb66762cb2889d64b9365e47ee9bc635, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  spawnPrefabs: []
 --- !u!4 &660277982
 Transform:
   m_ObjectHideFlags: 0
