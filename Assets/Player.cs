@@ -5,6 +5,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
   Rigidbody2D _Rigidbody;
+  SpriteRenderer _Renderer;
+
+
+
   bool _Direction; //true = right
   [SerializeField] ControlLayout _Layout = 0;
   [SerializeField] float _MaxSpeed;
@@ -28,11 +32,14 @@ public class Player : MonoBehaviour
   private void Awake()
   {
     _Rigidbody = GetComponent<Rigidbody2D>();
+    _Renderer = GetComponent<SpriteRenderer>();
   }
 
   private void FixedUpdate()
   {
-    HandleMovement();
+    Vector2 input = GetInput(_Layout);
+
+    HandleMovement(input);
 
 
 
@@ -41,18 +48,16 @@ public class Player : MonoBehaviour
     _Rigidbody.velocity += _VelocityChange;
     _VelocityChange = Vector2.zero;
 
-    if(_Rigidbody.velocity.x > 0){
+    if(input.x > 0){
       _Direction = true;
-    } else if(_Rigidbody.velocity.x < 0)  {
+    } else if(input.x < 0)  {
       _Direction = false;
     }
-
+    _Renderer.flipX = !_Direction;
   }
 
-  void HandleMovement()
+  void HandleMovement(Vector2 input)
   {
-    Vector2 input = GetInput(_Layout);
-
     if(input.y > 0)
     {
       if ((IsGrounded() || _MidairJump) && _JumpDelayR <= 0)
