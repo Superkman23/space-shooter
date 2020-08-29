@@ -10,6 +10,9 @@ public class Player : MonoBehaviour, IHealth {
 
   [HideInInspector]
   public Direction _Direction = Direction.Left;
+  [HideInInspector]
+  public int _PlayerNumber = 0;
+
   [SerializeField] ControlLayout _Layout = 0;
   [SerializeField] float _MaxSpeed;
   [SerializeField] float _Acceleration;
@@ -165,9 +168,10 @@ public class Player : MonoBehaviour, IHealth {
   public void AddHealth (int amount) => _Health += amount;
   public void TakeHealth (int amount) {
     _Health -= amount;
-
+    Debug.Log (_Health);
     if (_Health <= 0) {
       Instantiate (_DeathParticle, transform.position, Quaternion.identity);
+      GameController._Instance.PlayerDeath (this);
       Destroy (gameObject);
     }
   }

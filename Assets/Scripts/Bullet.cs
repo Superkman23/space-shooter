@@ -14,4 +14,15 @@ public class Bullet : MonoBehaviour {
 
     Destroy (gameObject);
   }
+
+  void OnTriggerStay2D (Collider2D collision) {
+    if (collision == _Parent) {
+      return;
+    }
+
+    var health = collision.GetComponent<IHealth> ();
+    health?.TakeHealth (_Damage);
+
+    Destroy (gameObject);
+  }
 }
