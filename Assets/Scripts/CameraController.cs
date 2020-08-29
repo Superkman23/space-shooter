@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour {
   [SerializeField] Vector2 _MinMaxY = new Vector2 (0, 10);
   [SerializeField] Vector2 _MinMaxX = new Vector2 (-5, 5);
   [SerializeField] float _PositionSmoothing = 5;
+  Vector2 _LastFocusNonZero = Vector3.zero;
 
   void Update () {
     Vector2 _Midpoint = Vector2.zero;
@@ -29,6 +30,10 @@ public class CameraController : MonoBehaviour {
     _Midpoint.y = Mathf.Max (_Midpoint.y, _MinMaxY.y);
     _Midpoint.y = Mathf.Min (_Midpoint.y, _MinMaxY.x);
 
-    transform.position = Vector3.Lerp (transform.position, new Vector3 (_Midpoint.x, _Midpoint.y, -10), _PositionSmoothing * Time.deltaTime);
+    if (_Targets.Count != 0) {
+      _LastFocusNonZero = _Midpoint;
+    }
+
+    transform.position = Vector3.Lerp (transform.position, new Vector3 (_LastFocusNonZero.x, _LastFocusNonZero.y, -10), _PositionSmoothing * Time.deltaTime);
   }
 }
