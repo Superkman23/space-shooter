@@ -19,6 +19,7 @@ public class Player : MonoBehaviour, IHealth {
   [SerializeField] bool _MidairJump;
   [SerializeField] float _JumpDelay;
   float _JumpDelayR;
+  bool _WantToJump;
 
   [SerializeField] LayerMask _WhatIsGround;
   [SerializeField] Vector2 _TopLeftGround;
@@ -36,8 +37,17 @@ public class Player : MonoBehaviour, IHealth {
     _Renderer = GetComponent<SpriteRenderer> ();
   }
 
+  private void Update()
+  {
+    if (!_WantToJump)
+    {
+      _WantToJump = GetInput(InputType.Down).y > 0;
+    }
+  }
+
+
   private void FixedUpdate () {
-    Vector2 input = GetInput ();
+    Vector2 input = GetInput(InputType.Hold);
 
     HandleMovement (input);
 
@@ -58,9 +68,10 @@ public class Player : MonoBehaviour, IHealth {
 
   void HandleMovement (Vector2 input) {
     if (input.y > 0) {
-      if ((IsGrounded () || _MidairJump) && _JumpDelayR <= 0) {
+      if ((IsGrounded () || _MidairJump) && (_JumpDelayR <= 0 || _WantToJump)) {
         Jump ();
         _JumpDelayR = _JumpDelay;
+        _WantToJump = false;
       }
     }
 
@@ -78,37 +89,95 @@ public class Player : MonoBehaviour, IHealth {
   }
   bool IsGrounded () => Physics2D.OverlapArea (_TopLeftGround + (Vector2) transform.position, _BottomRightGround + (Vector2) transform.position, _WhatIsGround);
 
-  Vector2 GetInput () {
+
+  enum InputType
+  {
+    Hold,
+    Down
+  }
+  Vector2 GetInput (InputType inputType) {
     Vector2 input = Vector2.zero;
-    switch (_Layout) {
-      case ControlLayout.WASD:
-        if (Input.GetKey (KeyCode.W)) {
-          input.y++;
+
+    switch (inputType)
+    {
+      case InputType.Hold:
+        if(_Layout == ControlLayout.WASD)
+        {
+          if (Input.GetKey(KeyCode.W))
+          {
+            input.y++;
+          }
+          if (Input.GetKey(KeyCode.S))
+          {
+            input.y--;
+          }
+          if (Input.GetKey(KeyCode.D))
+          {
+            input.x++;
+          }
+          if (Input.GetKey(KeyCode.A))
+          {
+            input.x--;
+          }
         }
-        if (Input.GetKey (KeyCode.S)) {
-          input.y--;
-        }
-        if (Input.GetKey (KeyCode.D)) {
-          input.x++;
-        }
-        if (Input.GetKey (KeyCode.A)) {
-          input.x--;
+        else
+        {
+          if (Input.GetKey(KeyCode.UpArrow))
+          {
+            input.y++;
+          }
+          if (Input.GetKey(KeyCode.DownArrow))
+          {
+            input.y--;
+          }
+          if (Input.GetKey(KeyCode.RightArrow))
+          {
+            input.x++;
+          }
+          if (Input.GetKey(KeyCode.LeftArrow))
+          {
+            input.x--;
+          }
         }
         break;
-
-      case ControlLayout.Arrows:
-      default:
-        if (Input.GetKey (KeyCode.UpArrow)) {
-          input.y++;
+      case InputType.Down:
+        if (_Layout == ControlLayout.WASD)
+        {
+          if (Input.GetKeyDown(KeyCode.W))
+          {
+            input.y++;
+          }
+          if (Input.GetKeyDown(KeyCode.S))
+          {
+            input.y--;
+          }
+          if (Input.GetKeyDown(KeyCode.D))
+          {
+            input.x++;
+          }
+          if (Input.GetKeyDown(KeyCode.A))
+          {
+            input.x--;
+          }
         }
-        if (Input.GetKey (KeyCode.DownArrow)) {
-          input.y--;
-        }
-        if (Input.GetKey (KeyCode.RightArrow)) {
-          input.x++;
-        }
-        if (Input.GetKey (KeyCode.LeftArrow)) {
-          input.x--;
+        else
+        {
+          if (Input.GetKeyDown(KeyCode.UpArrow))
+          {
+            input.y++;
+          }
+          if (Input.GetKeyDown(KeyCode.DownArrow))
+          {
+            input.y--;
+          }
+          if (Input.GetKeyDown(KeyCode.RightArrow))
+          {
+            input.x++;
+          }
+          if (Input.GetKeyDown(KeyCode.LeftArrow))
+          {
+            input.x--;
+          }
         }
         break;
     }
