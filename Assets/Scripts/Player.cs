@@ -37,6 +37,15 @@ public class Player : NetworkBehaviour
     force = Mathf.Clamp(force, -acceleration, acceleration);
 
     velocityChange.x = force;
+
+    // Jumping
+    if(input.y > 0)
+    {
+      RpcJump();
+    }
+
+
+    Debug.Log(velocityChange);
     RpcApplyForce(velocityChange);
   }
 
@@ -45,6 +54,14 @@ public class Player : NetworkBehaviour
   {
     _Link.AddDirectForce(input);
   }
+  [ClientRpc]
+  void RpcJump()
+  {
+    if(_Link._Rigidbody.velocity.y < 10)
+      _Link.AddDirectForce(Vector2.up);
+  }
+
+
 
 
   Vector2 GetInput()
