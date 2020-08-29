@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.U2D.Path.GUIFramework;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour, IHealth {
   Rigidbody2D _Rigidbody;
   SpriteRenderer _Renderer;
 
@@ -27,6 +27,8 @@ public class Player : MonoBehaviour {
   [SerializeField] Vector2 _TopLeftGround;
   [SerializeField] Vector2 _BottomRightGround;
 
+  int _Health = 100;
+
   public enum ControlLayout {
     WASD,
     Arrows
@@ -49,11 +51,11 @@ public class Player : MonoBehaviour {
 
     if (input.x > 0) {
       _Direction = Direction.Left;
-      transform.rotation = Quaternion.Euler(0, 0, 0);
+      transform.rotation = Quaternion.Euler (0, 0, 0);
     }
     else if (input.x < 0) {
       _Direction = Direction.Right;
-      transform.rotation = Quaternion.Euler(0, 180, 0);
+      transform.rotation = Quaternion.Euler (0, 180, 0);
     }
   }
 
@@ -115,4 +117,10 @@ public class Player : MonoBehaviour {
     }
     return input;
   }
+
+  // Health interface implementation
+  public int GetHealth() => _Health;
+  public void SetHealth(int value) => _Health = value;
+  public void AddHealth(int amount) => SetHealth(GetHealth() + amount);
+  public void TakeHealth(int amount) => SetHealth(GetHealth() - amount);
 }

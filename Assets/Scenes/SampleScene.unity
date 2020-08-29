@@ -527,6 +527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af13d2372832ee2459d9f46360572aa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Direction: 0
   _Layout: 0
   _MaxSpeed: 10
   _Acceleration: 50
@@ -550,6 +551,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ShootKey: 115
+  _Holding: {fileID: 0}
 --- !u!1 &168897820
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,6 +891,7 @@ GameObject:
   - component: {fileID: 465829983}
   - component: {fileID: 465829982}
   - component: {fileID: 465829985}
+  - component: {fileID: 465829986}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -999,8 +1002,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6793670910e860146b43529dd9853411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _BulletObject: {fileID: 2796747401631870413, guid: 1282ec01b3a611b49bacc43d2b926e08, type: 3}
+  _BulletForce: 10
+  _ThrownDamage: 5
   _OffsetFromPlayer: {x: 0, y: 0}
+  _BulletObject: {fileID: 2796747401631870413, guid: 1282ec01b3a611b49bacc43d2b926e08, type: 3}
+--- !u!50 &465829986
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465829981}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &476183014
 GameObject:
   m_ObjectHideFlags: 0
@@ -1856,6 +1882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af13d2372832ee2459d9f46360572aa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Direction: 0
   _Layout: 1
   _MaxSpeed: 10
   _Acceleration: 50
@@ -2032,3 +2059,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ShootKey: 274
+  _Holding: {fileID: 0}
