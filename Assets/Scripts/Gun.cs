@@ -7,13 +7,13 @@ public class Gun : MonoBehaviour, IPickup, IEntitySpawn {
   [SerializeField] Vector2 _OffsetFromPlayer = Vector2.zero;
   [SerializeField] int _ClipSize = 10;
   [SerializeField] bool _UnlimitedAmmo = false;
-  
-  [Header("Audio")]
+
+  [Header ("Audio")]
   [SerializeField] AudioClip _ShootSfx = null;
   [SerializeField] AudioClip _PickupSfx = null;
   [SerializeField] AudioClip _ThrowSfx = null;
   [SerializeField] AudioClip _ThrowCollideSfx = null;
-  
+
   [Header ("Components")]
   [SerializeField] GameObject _BulletObject = null;
   Rigidbody2D _Rigidbody = null;
@@ -52,7 +52,7 @@ public class Gun : MonoBehaviour, IPickup, IEntitySpawn {
       var health = other.GetComponent<IHealth> ();
       health?.TakeHealth (_ThrownDamage);
 
-      _Source.PlayOneShot(_ThrowCollideSfx);
+      _Source.PlayOneShot (_ThrowCollideSfx);
 
       _Rigidbody.velocity = Vector2.zero;
       _Rigidbody.AddForce (Vector2.up * 5, ForceMode2D.Impulse);
@@ -71,7 +71,7 @@ public class Gun : MonoBehaviour, IPickup, IEntitySpawn {
       newBullet.GetComponent<Rigidbody2D> ().velocity = (Vector3.right * -direction * _BulletForce) + (Vector3.right * _Parent._Rigidbody.velocity.x / 2);
       newBullet.GetComponent<Bullet> ()._Ignoring = new Collider2D[2] { _Parent._Collider, _Collider };
 
-      _Source.PlayOneShot(_ShootSfx);
+      _Source.PlayOneShot (_ShootSfx);
     }
 
     if (!_UnlimitedAmmo) {
@@ -91,7 +91,7 @@ public class Gun : MonoBehaviour, IPickup, IEntitySpawn {
     _Thrown = true;
     transform.parent = null;
 
-    _Source.PlayOneShot(_ThrowSfx);
+    _Source.PlayOneShot (_ThrowSfx);
 
     // Throw the gun
     _Collider.enabled = true;
@@ -119,7 +119,7 @@ public class Gun : MonoBehaviour, IPickup, IEntitySpawn {
 
     controller._Holding = this;
 
-    _Source.PlayOneShot(_PickupSfx);
+    _Source.PlayOneShot (_PickupSfx);
 
     _State = PickupState.PickedUp;
     _Collider.enabled = false;

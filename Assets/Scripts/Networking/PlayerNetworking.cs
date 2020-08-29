@@ -1,10 +1,9 @@
-﻿using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public class PlayerNetworking : NetworkBehaviour
-{
+public class PlayerNetworking : NetworkBehaviour {
   /*
   [SerializeField] private Vector3 vector = Vector3.zero;
   // Update is called once per frame
@@ -20,8 +19,7 @@ public class PlayerNetworking : NetworkBehaviour
   }*/
   Rigidbody2D _Rigidbody;
 
-  public enum Direction
-  {
+  public enum Direction {
     Left = -1,
     Right = 1
   }
@@ -45,63 +43,54 @@ public class PlayerNetworking : NetworkBehaviour
   [SerializeField] Vector2 _TopLeftGround;
   [SerializeField] Vector2 _BottomRightGround;
 
-  [Header("Components")]
+  [Header ("Components")]
   [SerializeField] ParticleSystem _DeathParticle = null;
 
   int _Health = 30;
 
-  public enum ControlLayout
-  {
+  public enum ControlLayout {
     WASD,
     Arrows,
     IJKL
   }
 
-  private void Awake()
-  {
-    _Rigidbody = GetComponent<Rigidbody2D>();
+  private void Awake () {
+    _Rigidbody = GetComponent<Rigidbody2D> ();
   }
 
-  private void Update()
-  {
+  private void Update () {
     if (!hasAuthority) { return; }
-    if (!_WantToJump)
-    {
-      _WantToJump = GetInput(InputType.Down).y > 0;
+    if (!_WantToJump) {
+      _WantToJump = GetInput (InputType.Down).y > 0;
     }
   }
-  [Client]
-  private void FixedUpdate()
-  {
-    if (!hasAuthority) { return; }
-    Vector2 input = GetInput(InputType.Hold);
 
-    HandleMovement(input);
+  [Client]
+  private void FixedUpdate () {
+    if (!hasAuthority) { return; }
+    Vector2 input = GetInput (InputType.Hold);
+
+    HandleMovement (input);
 
     _JumpDelayR -= Time.deltaTime;
 
     _Rigidbody.velocity += _VelocityChange;
     _VelocityChange = Vector2.zero;
 
-    if (input.x > 0)
-    {
+    if (input.x > 0) {
       _Direction = Direction.Left;
-      transform.rotation = Quaternion.Euler(0, 0, 0);
+      transform.rotation = Quaternion.Euler (0, 0, 0);
     }
-    else if (input.x < 0)
-    {
+    else if (input.x < 0) {
       _Direction = Direction.Right;
-      transform.rotation = Quaternion.Euler(0, 180, 0);
+      transform.rotation = Quaternion.Euler (0, 180, 0);
     }
   }
 
-  void HandleMovement(Vector2 input)
-  {
-    if (input.y > 0)
-    {
-      if ((IsGrounded() || _MidairJump) && (_JumpDelayR <= 0 || _WantToJump))
-      {
-        Jump();
+  void HandleMovement (Vector2 input) {
+    if (input.y > 0) {
+      if ((IsGrounded () || _MidairJump) && (_JumpDelayR <= 0 || _WantToJump)) {
+        Jump ();
         _JumpDelayR = _JumpDelay;
         _WantToJump = false;
       }
@@ -112,141 +101,107 @@ public class PlayerNetworking : NetworkBehaviour
     target -= _Rigidbody.velocity.x;
 
     float acceleration = _Acceleration * Time.deltaTime;
-    target = Mathf.Clamp(target, -acceleration, acceleration);
+    target = Mathf.Clamp (target, -acceleration, acceleration);
     _VelocityChange.x = target;
   }
 
-  void Jump()
-  {
-    _Rigidbody.velocity = new Vector2(_Rigidbody.velocity.x, 10);
+  void Jump () {
+    _Rigidbody.velocity = new Vector2 (_Rigidbody.velocity.x, 10);
   }
-  bool IsGrounded() => Physics2D.OverlapArea(_TopLeftGround + (Vector2)transform.position, _BottomRightGround + (Vector2)transform.position, _WhatIsGround);
+  bool IsGrounded () => Physics2D.OverlapArea (_TopLeftGround + (Vector2) transform.position, _BottomRightGround + (Vector2) transform.position, _WhatIsGround);
 
-  enum InputType
-  {
+  enum InputType {
     Hold,
     Down
   }
-  Vector2 GetInput(InputType inputType)
-  {
+  Vector2 GetInput (InputType inputType) {
     Vector2 input = Vector2.zero;
 
-    switch (inputType)
-    {
+    switch (inputType) {
       case InputType.Hold:
-        if (_Layout == ControlLayout.WASD)
-        {
-          if (Input.GetKey(KeyCode.W))
-          {
+        if (_Layout == ControlLayout.WASD) {
+          if (Input.GetKey (KeyCode.W)) {
             input.y++;
           }
-          if (Input.GetKey(KeyCode.S))
-          {
+          if (Input.GetKey (KeyCode.S)) {
             input.y--;
           }
-          if (Input.GetKey(KeyCode.D))
-          {
+          if (Input.GetKey (KeyCode.D)) {
             input.x++;
           }
-          if (Input.GetKey(KeyCode.A))
-          {
+          if (Input.GetKey (KeyCode.A)) {
             input.x--;
           }
         }
-        else if (_Layout == ControlLayout.Arrows)
-        {
-          if (Input.GetKey(KeyCode.UpArrow))
-          {
+        else if (_Layout == ControlLayout.Arrows) {
+          if (Input.GetKey (KeyCode.UpArrow)) {
             input.y++;
           }
-          if (Input.GetKey(KeyCode.DownArrow))
-          {
+          if (Input.GetKey (KeyCode.DownArrow)) {
             input.y--;
           }
-          if (Input.GetKey(KeyCode.RightArrow))
-          {
+          if (Input.GetKey (KeyCode.RightArrow)) {
             input.x++;
           }
-          if (Input.GetKey(KeyCode.LeftArrow))
-          {
+          if (Input.GetKey (KeyCode.LeftArrow)) {
             input.x--;
           }
         }
-        else
-        {
-          if (Input.GetKey(KeyCode.I))
-          {
+        else {
+          if (Input.GetKey (KeyCode.I)) {
             input.y++;
           }
-          if (Input.GetKey(KeyCode.K))
-          {
+          if (Input.GetKey (KeyCode.K)) {
             input.y--;
           }
-          if (Input.GetKey(KeyCode.L))
-          {
+          if (Input.GetKey (KeyCode.L)) {
             input.x++;
           }
-          if (Input.GetKey(KeyCode.J))
-          {
+          if (Input.GetKey (KeyCode.J)) {
             input.x--;
           }
         }
         break;
       case InputType.Down:
-        if (_Layout == ControlLayout.WASD)
-        {
-          if (Input.GetKeyDown(KeyCode.W))
-          {
+        if (_Layout == ControlLayout.WASD) {
+          if (Input.GetKeyDown (KeyCode.W)) {
             input.y++;
           }
-          if (Input.GetKeyDown(KeyCode.S))
-          {
+          if (Input.GetKeyDown (KeyCode.S)) {
             input.y--;
           }
-          if (Input.GetKeyDown(KeyCode.D))
-          {
+          if (Input.GetKeyDown (KeyCode.D)) {
             input.x++;
           }
-          if (Input.GetKeyDown(KeyCode.A))
-          {
+          if (Input.GetKeyDown (KeyCode.A)) {
             input.x--;
           }
         }
-        else if (_Layout == ControlLayout.Arrows)
-        {
-          if (Input.GetKeyDown(KeyCode.UpArrow))
-          {
+        else if (_Layout == ControlLayout.Arrows) {
+          if (Input.GetKeyDown (KeyCode.UpArrow)) {
             input.y++;
           }
-          if (Input.GetKeyDown(KeyCode.DownArrow))
-          {
+          if (Input.GetKeyDown (KeyCode.DownArrow)) {
             input.y--;
           }
-          if (Input.GetKeyDown(KeyCode.RightArrow))
-          {
+          if (Input.GetKeyDown (KeyCode.RightArrow)) {
             input.x++;
           }
-          if (Input.GetKeyDown(KeyCode.LeftArrow))
-          {
+          if (Input.GetKeyDown (KeyCode.LeftArrow)) {
             input.x--;
           }
         }
-        else
-        {
-          if (Input.GetKeyDown(KeyCode.I))
-          {
+        else {
+          if (Input.GetKeyDown (KeyCode.I)) {
             input.y++;
           }
-          if (Input.GetKeyDown(KeyCode.K))
-          {
+          if (Input.GetKeyDown (KeyCode.K)) {
             input.y--;
           }
-          if (Input.GetKeyDown(KeyCode.L))
-          {
+          if (Input.GetKeyDown (KeyCode.L)) {
             input.x++;
           }
-          if (Input.GetKeyDown(KeyCode.J))
-          {
+          if (Input.GetKeyDown (KeyCode.J)) {
             input.x--;
           }
         }
@@ -256,18 +211,16 @@ public class PlayerNetworking : NetworkBehaviour
   }
 
   // Health interface implementation
-  public int GetHealth() => _Health;
-  public void SetHealth(int value) => _Health = value;
-  public void AddHealth(int amount) => _Health += amount;
-  public void TakeHealth(int amount)
-  {
+  public int GetHealth () => _Health;
+  public void SetHealth (int value) => _Health = value;
+  public void AddHealth (int amount) => _Health += amount;
+  public void TakeHealth (int amount) {
     _Health -= amount;
-    Debug.Log(_Health);
-    if (_Health <= 0)
-    {
-      Instantiate(_DeathParticle, transform.position, Quaternion.identity);
+    Debug.Log (_Health);
+    if (_Health <= 0) {
+      Instantiate (_DeathParticle, transform.position, Quaternion.identity);
       //GameController._Instance.PlayerDeath(this);
-      Destroy(gameObject);
+      Destroy (gameObject);
     }
   }
 }

@@ -1,4 +1,3 @@
-namespace Mirror.Discovery
-{
-    public class ServerRequest : MessageBase { }
+namespace Mirror.Discovery {
+  public class ServerRequest : MessageBase { }
 }

@@ -27,7 +27,7 @@ public class Player : MonoBehaviour, IHealth {
   [SerializeField] Vector2 _TopLeftGround;
   [SerializeField] Vector2 _BottomRightGround;
 
-  [Header("Audio")]
+  [Header ("Audio")]
   [SerializeField] AudioClip _HitSfx = null;
   [SerializeField] AudioClip _DeathSfx = null;
   AudioSource _Source = null;
@@ -203,17 +203,16 @@ public class Player : MonoBehaviour, IHealth {
   public void AddHealth (int amount) => _Health += amount;
   public void TakeHealth (int amount) {
     _Health -= amount;
-    
+
     if (_Health <= 0) {
-      AudioSource.PlayClipAtPoint(_DeathSfx, transform.position);
+      AudioSource.PlayClipAtPoint (_DeathSfx, transform.position);
       GameController._Instance.PlayerDeath (this);
 
       Instantiate (_DeathParticle, transform.position, Quaternion.identity);
       Destroy (gameObject);
     }
-    else
-    {
-      _Source.PlayOneShot(_HitSfx);
+    else {
+      _Source.PlayOneShot (_HitSfx);
     }
   }
 }
