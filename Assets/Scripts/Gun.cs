@@ -10,6 +10,7 @@ public class Gun : MonoBehaviour, IPickup {
   [Header ("Components")]
   [SerializeField] GameObject _BulletObject = null;
   Rigidbody2D _Rigidbody = null;
+  Collider2D _Collider = null;
 
   class GunParent {
     public Collider2D _Collider = null;
@@ -26,16 +27,19 @@ public class Gun : MonoBehaviour, IPickup {
   void Awake () {
     _Rigidbody = GetComponent<Rigidbody2D> ();
     _Rigidbody.isKinematic = true;
+
+    _Collider = GetComponent<Collider2D>();
   }
 
-  void OnTriggerEnter2D (Collider2D other) {
+  void OnTriggerStay2D(Collider2D other)
+  {
     // If the thing colliding is the player
     if (other.CompareTag ("Player") && _State == PickupState.Dropped) {
       // Trigger the pickup event
       OnPickup (other.gameObject);
     }
 
-    if (_Thrown) {
+    if (_Thrown && other != _Collider) {
       // Try hit something, if nothing then just destroy itself
       var health = other.GetComponent<IHealth> ();
       health?.TakeHealth (_ThrownDamage);
@@ -72,7 +76,6 @@ public class Gun : MonoBehaviour, IPickup {
     transform.parent = null;
 
     // Throw the gun
-    _Rigidbody.position += Vector2.right * -direction;
     _Rigidbody.isKinematic = false;
     _Rigidbody.AddForce ((Vector3.right * -direction * _BulletForce), ForceMode2D.Impulse);
 
