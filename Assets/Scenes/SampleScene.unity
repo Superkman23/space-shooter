@@ -3067,7 +3067,7 @@ MonoBehaviour:
   _PlayerNumber: 0
   _Layout: 1
   _MaxSpeed: 10
-  _Acceleration: 50
+  _Acceleration: 75
   _MidairJump: 1
   _JumpDelay: 0.5
   _WhatIsGround:
