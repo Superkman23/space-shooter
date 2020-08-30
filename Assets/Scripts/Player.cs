@@ -61,9 +61,7 @@ public class Player : NetworkBehaviour
     velocity.x = Mathf.Clamp(velocity.x, -_MovementLimits.x, _MovementLimits.x);
     velocity.y = Mathf.Clamp(velocity.y, -_MovementLimits.y, _MovementLimits.y);
 
-    velocity -= _Link._Rigidbody.velocity;
-
-    RpcApplyForce(velocity);
+    _Link._Rigidbody.velocity = velocity;
   }
 
   #region RPC
