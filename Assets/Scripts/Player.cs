@@ -75,7 +75,7 @@ public class Player : NetworkBehaviour
     }
 
     Vector2 velocity = _Link._Rigidbody.velocity;
-    if(input.x == 0) { velocity.x /= 2; }
+    if(input.x == 0) { velocity.x /= 1.15f; }
     velocity.x = Mathf.Clamp(velocity.x, -_MovementLimits.x, _MovementLimits.x);
     velocity.y = Mathf.Clamp(velocity.y, -_MovementLimits.y, _MovementLimits.y);
     _Link._Rigidbody.velocity = velocity;
