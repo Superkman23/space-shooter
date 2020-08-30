@@ -15,6 +15,10 @@ public class Player : NetworkBehaviour
   [SerializeField] float _Acceleration;
   [SerializeField] float _MoveSpeed;
 
+  [Header("Debug")]
+  [SerializeField] bool _EnableDebug = false;
+
+
   void Start()
   {
     _Link = GetComponent<PhysicsLink>();
@@ -33,18 +37,30 @@ public class Player : NetworkBehaviour
   {
     Vector2 velocityChange = Vector2.zero;
 
+    if (_EnableDebug)
+    {
+      Debug.Log("Input " + input);
+    }
 
     // Movement
     float force = input.x * _MoveSpeed;
     force -= _Link._Rigidbody.velocity.x;
     if(input.x == 0) { force /= 2; }
 
+    if (_EnableDebug)
+    {
+      Debug.Log("Force before clamp " + force);
+    }
+
+
     float acceleration = _Acceleration * Time.fixedDeltaTime;
     force = Mathf.Clamp(force, -acceleration, acceleration);
-
-
-
     velocityChange.x = force;
+
+    if (_EnableDebug)
+    {
+      Debug.Log("Velocity change " + velocityChange);
+    }
 
     RpcFlipSprite(input.x);
 
