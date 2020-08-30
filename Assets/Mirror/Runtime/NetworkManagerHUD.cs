@@ -101,10 +101,10 @@ namespace Mirror {
     void StatusLabels () {
       // server / client status message
       if (NetworkServer.active) {
-        GUILayout.Label ("Server: active. Transport: " + Transport.activeTransport);
+        GUILayout.Label ("Server: Active. Transport: " + Transport.activeTransport);
       }
       if (NetworkClient.isConnected) {
-        GUILayout.Label ("Client: address=" + manager.networkAddress);
+        GUILayout.Label ("Client: Address =" + manager.networkAddress);
       }
     }
 
