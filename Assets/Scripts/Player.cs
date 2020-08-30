@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Mirror;
+using System;
 
 public class Player : NetworkBehaviour
 {
@@ -37,6 +38,8 @@ public class Player : NetworkBehaviour
     // Movement
     float force = input.x * _MoveSpeed;
     force -= _Link._Rigidbody.velocity.x;
+    force = Mathf.Round(force);
+
     float acceleration = _Acceleration * Time.fixedDeltaTime;
     force = Mathf.Clamp(force, -acceleration, acceleration);
     velocityChange.x = force;
