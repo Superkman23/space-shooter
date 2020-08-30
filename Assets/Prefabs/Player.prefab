@@ -124,6 +124,13 @@ MonoBehaviour:
   _JetpackParticles: {fileID: 6762733917423458087}
   _Acceleration: 50
   _MoveSpeed: 10
+  _MovementLimits: {x: 15, y: 20}
+  D_Input: {x: 0, y: 0}
+  D_Velocity: {x: 0, y: 0}
+  D_Position: {x: 0, y: 0}
+  D_Force: 0
+  D_VelocityChange: 0
+  D_Acceleration: 0
 --- !u!50 &4713635225373350776
 Rigidbody2D:
   serializedVersion: 4

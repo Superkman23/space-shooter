@@ -14,6 +14,7 @@ public class Player : NetworkBehaviour
   [Header("Movement")]
   [SerializeField] float _Acceleration;
   [SerializeField] float _MoveSpeed;
+  [SerializeField] Vector2 _MovementLimits = new Vector2(5, 5);
 
   [Header("Debug")]
   [SyncVar] [SerializeField] Vector2 D_Input;
@@ -47,7 +48,6 @@ public class Player : NetworkBehaviour
     // Movement
     float force = input.x * _MoveSpeed;
     force -= _Link._Rigidbody.velocity.x * (float)NetworkTime.rtt;
-    if(input.x == 0) { force /= 2; }
     D_Force = force; // Debug
 
     float acceleration = _Acceleration * Time.fixedDeltaTime;
@@ -73,6 +73,12 @@ public class Player : NetworkBehaviour
     {
       RpcApplyForce(-_Link._Rigidbody.velocity);
     }
+
+    Vector2 velocity = _Link._Rigidbody.velocity;
+    if(input.x == 0) { velocity.x /= 2; }
+    velocity.x = Mathf.Clamp(velocity.x, -_MovementLimits.x, _MovementLimits.x);
+    velocity.y = Mathf.Clamp(velocity.y, -_MovementLimits.y, _MovementLimits.y);
+    _Link._Rigidbody.velocity = velocity;
   }
 
   #region RPC
