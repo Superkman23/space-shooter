@@ -1,60 +1,54 @@
-﻿using UnityEngine;
-using Mirror;
 using System;
+using Mirror;
+using UnityEngine;
 
-public class Player : NetworkBehaviour
-{
+public class Player : NetworkBehaviour {
   PhysicsLink _Link;
 
-  [Header("Visuals")]
+  [Header ("Visuals")]
   [SerializeField] Sprite _RedSprite;
   [SerializeField] Sprite _BlueSprite;
   [SerializeField] ParticleSystem _JetpackParticles;
   SpriteRenderer _Renderer;
 
-  [Header("Movement")]
+  [Header ("Movement")]
   [SerializeField] float _Acceleration;
   [SerializeField] float _MoveSpeed;
 
-  void Start()
-  {
-    _Link = GetComponent<PhysicsLink>();
-    _Renderer = GetComponent<SpriteRenderer>();
+  void Start () {
+    _Link = GetComponent<PhysicsLink> ();
+    _Renderer = GetComponent<SpriteRenderer> ();
     _Renderer.sprite = hasAuthority ? _BlueSprite : _RedSprite;
   }
+
   [Client]
-  void FixedUpdate()
-  {
+  void FixedUpdate () {
     if (!hasAuthority) { return; }
-    CMDSendInput(GetInput());
+    CMDSendInput (GetInput ());
   }
 
   [Command]
-  void CMDSendInput(Vector2 input)
-  {
+  void CMDSendInput (Vector2 input) {
     Vector2 velocityChange = Vector2.zero;
-
 
     // Movement
     float force = input.x * _MoveSpeed;
     force -= _Link._Rigidbody.velocity.x;
-    force = Mathf.Round(force);
+    force = Mathf.Round (force);
 
     float acceleration = _Acceleration * Time.fixedDeltaTime;
-    force = Mathf.Clamp(force, -acceleration, acceleration);
+    force = Mathf.Clamp (force, -acceleration, acceleration);
     velocityChange.x = force;
-    RpcApplyForce(velocityChange);
-    RpcFlipSprite(input.x);
+    RpcApplyForce (velocityChange);
+    RpcFlipSprite (input.x);
 
     // Jumping
-    if(input.y > 0)
-    {
-      RpcJump();
-      RPCJetpackParticles(true);
+    if (input.y > 0) {
+      RpcJump ();
+      RPCJetpackParticles (true);
     }
-    else
-    {
-      RPCJetpackParticles(false);
+    else {
+      RPCJetpackParticles (false);
     }
 
   }
@@ -62,68 +56,56 @@ public class Player : NetworkBehaviour
   #region RPC
 
   [ClientRpc]
-  void RpcApplyForce(Vector2 input)
-  {
-    _Link.AddDirectForce(input);
+  void RpcApplyForce (Vector2 input) {
+    _Link.AddDirectForce (input);
   }
+
   [ClientRpc]
-  void RpcJump()
-  {
-    if(_Link._Rigidbody.velocity.y < 10)
-      _Link.AddDirectForce(Vector2.up);
+  void RpcJump () {
+    if (_Link._Rigidbody.velocity.y < 10)
+      _Link.AddDirectForce (Vector2.up);
   }
+
   [ClientRpc]
-  void RpcFlipSprite(float input)
-  {
-    if (input > 0)
-    {
-      transform.rotation = Quaternion.Euler(0, 0, 0);
+  void RpcFlipSprite (float input) {
+    if (input > 0) {
+      transform.rotation = Quaternion.Euler (0, 0, 0);
     }
-    else if (input < 0)
-    {
-      transform.rotation = Quaternion.Euler(0, 180, 0);
+    else if (input < 0) {
+      transform.rotation = Quaternion.Euler (0, 180, 0);
     }
   }
+
   [ClientRpc]
-  void RPCJetpackParticles(bool active)
-  {
-    DoJetpackParticles(active);
+  void RPCJetpackParticles (bool active) {
+    DoJetpackParticles (active);
   }
-  void DoJetpackParticles(bool active)
-  {
-    if (active)
-    {
-      _JetpackParticles.Play();
+  void DoJetpackParticles (bool active) {
+    if (active) {
+      _JetpackParticles.Play ();
     }
-    else
-    {
-      _JetpackParticles.Stop();
+    else {
+      _JetpackParticles.Stop ();
     }
   }
 
   #endregion
 
-  Vector2 GetInput()
-  {
+  Vector2 GetInput () {
     Vector2 input = Vector2.zero;
-    if (Input.GetKey(KeyCode.W))
-    {
+    if (Input.GetKey (KeyCode.W)) {
       input.y++;
     }
-    if (Input.GetKey(KeyCode.A))
-    {
+    if (Input.GetKey (KeyCode.A)) {
       input.x--;
     }
-    if (Input.GetKey(KeyCode.S))
-    {
+    if (Input.GetKey (KeyCode.S)) {
       input.y--;
     }
-    if (Input.GetKey(KeyCode.D))
-    {
+    if (Input.GetKey (KeyCode.D)) {
       input.x++;
     }
     return input;
   }
-
 
 }
