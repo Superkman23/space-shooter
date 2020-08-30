@@ -20,12 +20,6 @@ public class PhysicsLink : NetworkBehaviour
       _Velocity = _Rigidbody.velocity;
       _AngularVelocity = _Rigidbody.angularVelocity;
 
-      //Prevent Jittering
-      if (_Velocity.magnitude < 0.2f)
-      {
-        _Velocity = Vector2.zero;
-      }
-
       _Rigidbody.position = _Position;
       _Rigidbody.rotation = _Rotation;
       _Rigidbody.velocity = _Velocity;
@@ -38,7 +32,6 @@ public class PhysicsLink : NetworkBehaviour
       _Rigidbody.velocity = _Velocity;
       _Rigidbody.angularVelocity = _AngularVelocity;
     }
-    Debug.Log(_Velocity);
   }
   [Command]//function that runs on server when called by a client
   public void CmdResetPose()
@@ -67,4 +60,5 @@ public class PhysicsLink : NetworkBehaviour
   {
     _Rigidbody.velocity += force;
   }
+
 }
