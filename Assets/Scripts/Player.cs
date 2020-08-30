@@ -16,7 +16,7 @@ public class Player : NetworkBehaviour
   [SerializeField] float _MoveSpeed;
 
   [Header("Debug")]
-  [SerializeField] bool _EnableDebug = false;
+  [SyncVar] [SerializeField] Vector2 _Input;
 
 
   void Start()
@@ -35,32 +35,17 @@ public class Player : NetworkBehaviour
   [Command]
   void CMDSendInput(Vector2 input)
   {
+    _Input = input;
     Vector2 velocityChange = Vector2.zero;
-
-    if (_EnableDebug)
-    {
-      RpcLogDebug("Input " + input);
-    }
 
     // Movement
     float force = input.x * _MoveSpeed;
     force -= _Link._Rigidbody.velocity.x;
     if(input.x == 0) { force /= 2; }
 
-    if (_EnableDebug)
-    {
-      RpcLogDebug("Force before clamp " + force);
-    }
-
-
     float acceleration = _Acceleration * Time.fixedDeltaTime;
     force = Mathf.Clamp(force, -acceleration, acceleration);
     velocityChange.x = force;
-
-    if (_EnableDebug)
-    {
-      RpcLogDebug("Velocity change " + velocityChange);
-    }
 
     RpcFlipSprite(input.x);
 
@@ -82,14 +67,7 @@ public class Player : NetworkBehaviour
     }
   }
 
-
   #region RPC
-  [ClientRpc]
-  void RpcLogDebug(string message)
-  {
-    Debug.Log(message);
-  }
-
   [ClientRpc]
   void RpcApplyForce(Vector2 input)
   {
