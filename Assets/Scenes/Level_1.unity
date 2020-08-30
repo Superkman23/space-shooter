@@ -1410,7 +1410,7 @@ MonoBehaviour:
   runInBackground: 1
   startOnHeadless: 1
   showDebugMessages: 0
-  serverTickRate: 50
+  serverTickRate: 128
   offlineScene: 
   onlineScene: 
   transport: {fileID: 554299941}

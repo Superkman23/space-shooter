@@ -16,7 +16,12 @@ public class Player : NetworkBehaviour
   [SerializeField] float _MoveSpeed;
 
   [Header("Debug")]
-  [SyncVar] [SerializeField] Vector2 _Input;
+  [SyncVar] [SerializeField] Vector2 D_Input;
+  [SyncVar] [SerializeField] Vector2 D_Velocity;
+  [SyncVar] [SerializeField] Vector2 D_Position;
+  [SyncVar] [SerializeField] float D_Force;
+  [SyncVar] [SerializeField] float D_VelocityChange;
+  [SyncVar] [SerializeField] float D_Acceleration;
 
 
   void Start()
@@ -31,22 +36,25 @@ public class Player : NetworkBehaviour
     if (!hasAuthority) { return; }
     CMDSendInput(GetInput());
   }
-
   [Command]
   void CMDSendInput(Vector2 input)
   {
-    _Input = input;
+    D_Input = input; // Debug
+    D_Velocity = _Link._Rigidbody.velocity; // Debug
+    D_Position = _Link._Rigidbody.position; // Debug
     Vector2 velocityChange = Vector2.zero;
 
     // Movement
     float force = input.x * _MoveSpeed;
-    force -= _Link._Rigidbody.velocity.x;
+    force -= _Link._Rigidbody.velocity.x * (float)NetworkTime.rtt;
     if(input.x == 0) { force /= 2; }
+    D_Force = force; // Debug
 
     float acceleration = _Acceleration * Time.fixedDeltaTime;
+    D_Acceleration = acceleration; //Debug
     force = Mathf.Clamp(force, -acceleration, acceleration);
     velocityChange.x = force;
-
+    D_VelocityChange = velocityChange.x; // Debug
     RpcFlipSprite(input.x);
 
     // Jumping
