@@ -123,6 +123,7 @@ MonoBehaviour:
   _BlueSprite: {fileID: 21300000, guid: d191f0d9037307c4da44441e3805c161, type: 3}
   _JetpackParticles: {fileID: 6762733917423458087}
   _Acceleration: 50
+  _Deceleration: 1.15
   _MoveSpeed: 10
   _MovementLimits: {x: 15, y: 20}
 --- !u!50 &4713635225373350776

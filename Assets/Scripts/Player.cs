@@ -12,8 +12,9 @@ public class Player : NetworkBehaviour
   SpriteRenderer _Renderer;
 
   [Header("Movement")]
-  [SerializeField] float _Acceleration;
-  [SerializeField] float _MoveSpeed;
+  [SerializeField] float _Acceleration = 50;
+  [SerializeField] float _Deceleration = 2;
+  [SerializeField] float _MoveSpeed = 10;
   [SerializeField] Vector2 _MovementLimits = new Vector2(5, 5);
 
   void Start()
@@ -33,10 +34,8 @@ public class Player : NetworkBehaviour
   void CMDSendInput(Vector2 input)
   {
     Vector2 velocityChange = Vector2.zero;
-
     // Movement
     float force = input.x * _MoveSpeed;
-    force -= _Link._Rigidbody.velocity.x * (float)NetworkTime.rtt;
 
     float acceleration = _Acceleration * Time.fixedDeltaTime;
     force = Mathf.Clamp(force, -acceleration, acceleration);
@@ -57,7 +56,7 @@ public class Player : NetworkBehaviour
     RpcApplyForce(velocityChange);
 
     Vector2 velocity = _Link._Rigidbody.velocity;
-    if(input.x == 0) { velocity.x /= 1.15f; }
+    if(input.x == 0) { velocity.x /= _Deceleration; } // Handles deceleration
     velocity.x = Mathf.Clamp(velocity.x, -_MovementLimits.x, _MovementLimits.x);
     velocity.y = Mathf.Clamp(velocity.y, -_MovementLimits.y, _MovementLimits.y);
 
