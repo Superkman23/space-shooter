@@ -27,13 +27,13 @@ public class PhysicsLink : NetworkBehaviour
     }
     if (isClient) 
     {
-      _Rigidbody.position = _Position;// + _Velocity * (float)NetworkTime.rtt;
-      _Rigidbody.rotation = _Rotation;// * _AngularVelocity * (float)NetworkTime.rtt;
+      _Rigidbody.position = _Position;
+      _Rigidbody.rotation = _Rotation;
       _Rigidbody.velocity = _Velocity;
       _Rigidbody.angularVelocity = _AngularVelocity;
     }
   }
-  [Command]//function that runs on server when called by a client
+  [Command]
   public void CmdResetPose()
   {
     _Rigidbody.position = new Vector3(0, 1, 0);

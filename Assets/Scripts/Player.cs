@@ -16,15 +16,6 @@ public class Player : NetworkBehaviour
   [SerializeField] float _MoveSpeed;
   [SerializeField] Vector2 _MovementLimits = new Vector2(5, 5);
 
-  [Header("Debug")]
-  [SyncVar] [SerializeField] Vector2 D_Input;
-  [SyncVar] [SerializeField] Vector2 D_Velocity;
-  [SyncVar] [SerializeField] Vector2 D_Position;
-  [SyncVar] [SerializeField] float D_Force;
-  [SyncVar] [SerializeField] float D_VelocityChange;
-  [SyncVar] [SerializeField] float D_Acceleration;
-
-
   void Start()
   {
     _Link = GetComponent<PhysicsLink>();
@@ -37,24 +28,19 @@ public class Player : NetworkBehaviour
     if (!hasAuthority) { return; }
     CMDSendInput(GetInput());
   }
+
   [Command]
   void CMDSendInput(Vector2 input)
   {
-    D_Input = input; // Debug
-    D_Velocity = _Link._Rigidbody.velocity; // Debug
-    D_Position = _Link._Rigidbody.position; // Debug
     Vector2 velocityChange = Vector2.zero;
 
     // Movement
     float force = input.x * _MoveSpeed;
     force -= _Link._Rigidbody.velocity.x * (float)NetworkTime.rtt;
-    D_Force = force; // Debug
 
     float acceleration = _Acceleration * Time.fixedDeltaTime;
-    D_Acceleration = acceleration; //Debug
     force = Mathf.Clamp(force, -acceleration, acceleration);
     velocityChange.x = force;
-    D_VelocityChange = velocityChange.x; // Debug
     RpcFlipSprite(input.x);
 
     // Jumping
@@ -69,16 +55,15 @@ public class Player : NetworkBehaviour
     }
 
     RpcApplyForce(velocityChange);
-    if (_Link._Rigidbody.velocity.magnitude < 0.2f)
-    {
-      RpcApplyForce(-_Link._Rigidbody.velocity);
-    }
 
     Vector2 velocity = _Link._Rigidbody.velocity;
     if(input.x == 0) { velocity.x /= 1.15f; }
     velocity.x = Mathf.Clamp(velocity.x, -_MovementLimits.x, _MovementLimits.x);
     velocity.y = Mathf.Clamp(velocity.y, -_MovementLimits.y, _MovementLimits.y);
-    _Link._Rigidbody.velocity = velocity;
+
+    velocity -= _Link._Rigidbody.velocity;
+
+    RpcApplyForce(velocity);
   }
 
   #region RPC
