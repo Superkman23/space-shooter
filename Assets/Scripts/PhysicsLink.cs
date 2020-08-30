@@ -27,8 +27,8 @@ public class PhysicsLink : NetworkBehaviour
     }
     if (isClient) 
     {
-      _Rigidbody.position = _Position + _Velocity * (float)NetworkTime.rtt;
-      _Rigidbody.rotation = _Rotation * _AngularVelocity * (float)NetworkTime.rtt;
+      _Rigidbody.position = _Position;// + _Velocity * (float)NetworkTime.rtt;
+      _Rigidbody.rotation = _Rotation;// * _AngularVelocity * (float)NetworkTime.rtt;
       _Rigidbody.velocity = _Velocity;
       _Rigidbody.angularVelocity = _AngularVelocity;
     }
