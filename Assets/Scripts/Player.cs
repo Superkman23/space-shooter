@@ -39,8 +39,9 @@ public class Player : NetworkBehaviour
     force -= _Link._Rigidbody.velocity.x;
     float acceleration = _Acceleration * Time.fixedDeltaTime;
     force = Mathf.Clamp(force, -acceleration, acceleration);
+
     velocityChange.x = force;
-    RpcApplyForce(velocityChange);
+
     RpcFlipSprite(input.x);
 
     // Jumping
@@ -54,6 +55,11 @@ public class Player : NetworkBehaviour
       RPCJetpackParticles(false);
     }
 
+    RpcApplyForce(velocityChange);
+    if (_Link._Rigidbody.velocity.magnitude < 0.2f)
+    {
+      RpcApplyForce(-_Link._Rigidbody.velocity);
+    }
   }
 
   #region RPC
