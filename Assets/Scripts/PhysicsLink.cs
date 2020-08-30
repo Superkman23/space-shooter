@@ -13,24 +13,32 @@ public class PhysicsLink : NetworkBehaviour
 
   void FixedUpdate()
   {
-    if (isServer)// If we are the server update the varibles with our rigidbody info
+    if (isServer)
     {
       _Position = _Rigidbody.position;
       _Rotation = _Rigidbody.rotation;
       _Velocity = _Rigidbody.velocity;
       _AngularVelocity = _Rigidbody.angularVelocity;
+
+      //Prevent Jittering
+      if (_Velocity.magnitude < 0.2f)
+      {
+        _Velocity = Vector2.zero;
+      }
+
       _Rigidbody.position = _Position;
       _Rigidbody.rotation = _Rotation;
       _Rigidbody.velocity = _Velocity;
       _Rigidbody.angularVelocity = _AngularVelocity;
     }
-    if (isClient)//if we are a client update our rigidbody with the servers rigidbody info
+    else // Not server so must be client
     {
-      _Rigidbody.position = _Position + _Velocity * (float)NetworkTime.rtt;//account for the lag and update our varibles
+      _Rigidbody.position = _Position + _Velocity * (float)NetworkTime.rtt;
       _Rigidbody.rotation = _Rotation * _AngularVelocity * (float)NetworkTime.rtt;
       _Rigidbody.velocity = _Velocity;
       _Rigidbody.angularVelocity = _AngularVelocity;
     }
+    Debug.Log(_Velocity);
   }
   [Command]//function that runs on server when called by a client
   public void CmdResetPose()

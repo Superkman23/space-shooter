@@ -42,7 +42,7 @@ public class Player : NetworkBehaviour
 
     velocityChange.x = force;
 
-    RpcFlip(input.x);
+    RpcFlipSprite(input.x);
 
     // Jumping
     if(input.y > 0)
@@ -55,9 +55,11 @@ public class Player : NetworkBehaviour
       RPCJetpackParticles(false);
     }
 
-
-    Debug.Log(velocityChange);
     RpcApplyForce(velocityChange);
+    if (_Link._Rigidbody.velocity.magnitude < 0.2f)
+    {
+      RpcApplyForce(-_Link._Rigidbody.velocity);
+    }
   }
 
   #region RPC
@@ -74,7 +76,7 @@ public class Player : NetworkBehaviour
       _Link.AddDirectForce(Vector2.up);
   }
   [ClientRpc]
-  void RpcFlip(float input)
+  void RpcFlipSprite(float input)
   {
     if (input > 0)
     {
