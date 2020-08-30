@@ -39,7 +39,7 @@ public class Player : NetworkBehaviour
 
     if (_EnableDebug)
     {
-      Debug.Log("Input " + input);
+      RpcLogDebug("Input " + input);
     }
 
     // Movement
@@ -49,7 +49,7 @@ public class Player : NetworkBehaviour
 
     if (_EnableDebug)
     {
-      Debug.Log("Force before clamp " + force);
+      RpcLogDebug("Force before clamp " + force);
     }
 
 
@@ -59,7 +59,7 @@ public class Player : NetworkBehaviour
 
     if (_EnableDebug)
     {
-      Debug.Log("Velocity change " + velocityChange);
+      RpcLogDebug("Velocity change " + velocityChange);
     }
 
     RpcFlipSprite(input.x);
@@ -82,7 +82,13 @@ public class Player : NetworkBehaviour
     }
   }
 
+
   #region RPC
+  [ClientRpc]
+  void RpcLogDebug(string message)
+  {
+    Debug.Log(message);
+  }
 
   [ClientRpc]
   void RpcApplyForce(Vector2 input)
