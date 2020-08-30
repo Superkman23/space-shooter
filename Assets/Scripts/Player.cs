@@ -14,7 +14,8 @@ public class Player : NetworkBehaviour
   [Header("Movement")]
   [SerializeField] float _Acceleration = 50;
   [SerializeField] float _Deceleration = 2;
-  [SerializeField] float _MoveSpeed = 10;
+  [SerializeField] float _JetpackMaxSpeed = 10;
+  [SerializeField] float _JetpackAcceleration = 1;
   [SerializeField] Vector2 _MovementLimits = new Vector2(5, 5);
 
   void Start()
@@ -35,11 +36,8 @@ public class Player : NetworkBehaviour
   {
     Vector2 velocityChange = Vector2.zero;
     // Movement
-    float force = input.x * _MoveSpeed;
-
     float acceleration = _Acceleration * Time.fixedDeltaTime;
-    force = Mathf.Clamp(force, -acceleration, acceleration);
-    velocityChange.x = force;
+    velocityChange.x = input.x * acceleration;
     RpcFlipSprite(input.x);
 
     // Jumping
@@ -72,8 +70,8 @@ public class Player : NetworkBehaviour
   [ClientRpc]
   void RpcJump()
   {
-    if(_Link._Rigidbody.velocity.y < 10)
-      _Link.AddDirectForce(Vector2.up);
+    if(_Link._Rigidbody.velocity.y < _JetpackMaxSpeed)
+      _Link.AddDirectForce(Vector2.up * _JetpackAcceleration);
   }
   [ClientRpc]
   void RpcFlipSprite(float input)
