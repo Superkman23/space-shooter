@@ -20,25 +20,18 @@ public class PhysicsLink : NetworkBehaviour
       _Velocity = _Rigidbody.velocity;
       _AngularVelocity = _Rigidbody.angularVelocity;
 
-      //Prevent Jittering
-      if (_Velocity.magnitude < 0.2f)
-      {
-        _Velocity = Vector2.zero;
-      }
-
       _Rigidbody.position = _Position;
       _Rigidbody.rotation = _Rotation;
       _Rigidbody.velocity = _Velocity;
       _Rigidbody.angularVelocity = _AngularVelocity;
     }
-    else // Not server so must be client
+    if (isClient) 
     {
-      _Rigidbody.position = _Position + _Velocity * (float)NetworkTime.rtt;
-      _Rigidbody.rotation = _Rotation * _AngularVelocity * (float)NetworkTime.rtt;
+      _Rigidbody.position = _Position;// + _Velocity * (float)NetworkTime.rtt;
+      _Rigidbody.rotation = _Rotation;// * _AngularVelocity * (float)NetworkTime.rtt;
       _Rigidbody.velocity = _Velocity;
       _Rigidbody.angularVelocity = _AngularVelocity;
     }
-    Debug.Log(_Velocity);
   }
   [Command]//function that runs on server when called by a client
   public void CmdResetPose()

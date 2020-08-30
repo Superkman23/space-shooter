@@ -37,8 +37,12 @@ public class Player : NetworkBehaviour
     // Movement
     float force = input.x * _MoveSpeed;
     force -= _Link._Rigidbody.velocity.x;
+    if(input.x == 0) { force /= 2; }
+
     float acceleration = _Acceleration * Time.fixedDeltaTime;
     force = Mathf.Clamp(force, -acceleration, acceleration);
+
+
 
     velocityChange.x = force;
 
