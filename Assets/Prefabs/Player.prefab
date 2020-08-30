@@ -125,12 +125,6 @@ MonoBehaviour:
   _Acceleration: 50
   _MoveSpeed: 10
   _MovementLimits: {x: 15, y: 20}
-  D_Input: {x: 0, y: 0}
-  D_Velocity: {x: 0, y: 0}
-  D_Position: {x: 0, y: 0}
-  D_Force: 0
-  D_VelocityChange: 0
-  D_Acceleration: 0
 --- !u!50 &4713635225373350776
 Rigidbody2D:
   serializedVersion: 4
@@ -1071,7 +1065,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 10
       minScalar: 10
       maxCurve:
         serializedVersion: 2
