@@ -28,7 +28,38 @@ public class Player : NetworkBehaviour
   void FixedUpdate()
   {
     if (!hasAuthority) { return; }
-    CMDSendInput(GetInput());
+    Vector2 input = GetInput();
+    HandleInput(input);
+    CMDSendInput(input);
+  }
+
+  void HandleInput(Vector2 input)
+  {
+    Vector2 velocityChange = Vector2.zero;
+    // Movement
+    float acceleration = _Acceleration * Time.fixedDeltaTime;
+    velocityChange.x = input.x * acceleration;
+    FlipSprite(input.x);
+
+    // Jumping
+    if (input.y > 0)
+    {
+      Jump();
+      DoJetpackParticles(true);
+    }
+    else
+    {
+      DoJetpackParticles(false);
+    }
+
+    _Link.AddDirectForce(velocityChange);
+
+    Vector2 velocity = _Link._Rigidbody.velocity;
+    if (input.x == 0) { velocity.x /= _Deceleration; } // Handles deceleration
+    velocity.x = Mathf.Clamp(velocity.x, -_MovementLimits.x, _MovementLimits.x);
+    velocity.y = Mathf.Clamp(velocity.y, -_MovementLimits.y, _MovementLimits.y);
+
+    _Link._Rigidbody.velocity = velocity;
   }
 
   [Command]
@@ -61,20 +92,34 @@ public class Player : NetworkBehaviour
     _Link._Rigidbody.velocity = velocity;
   }
 
+
   #region RPC
   [ClientRpc]
   void RpcApplyForce(Vector2 input)
   {
     _Link.AddDirectForce(input);
   }
+
   [ClientRpc]
   void RpcJump()
   {
-    if(_Link._Rigidbody.velocity.y < _JetpackMaxSpeed)
+    if (!hasAuthority) { return; }
+    Jump();
+  }
+  void Jump() 
+  {
+    if (_Link._Rigidbody.velocity.y < _JetpackMaxSpeed)
       _Link.AddDirectForce(Vector2.up * _JetpackAcceleration);
   }
+
+
   [ClientRpc]
   void RpcFlipSprite(float input)
+  {
+    if (hasAuthority) { return; }
+    FlipSprite(input);
+  }
+  void FlipSprite(float input)
   {
     if (input > 0)
     {
@@ -85,6 +130,8 @@ public class Player : NetworkBehaviour
       transform.rotation = Quaternion.Euler(0, 180, 0);
     }
   }
+
+
   [ClientRpc]
   void RPCJetpackParticles(bool active)
   {
