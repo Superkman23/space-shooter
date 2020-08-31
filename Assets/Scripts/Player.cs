@@ -10,6 +10,7 @@ public class Player : NetworkBehaviour
   [SerializeField] Sprite _RedSprite;
   [SerializeField] Sprite _BlueSprite;
   [SerializeField] ParticleSystem _JetpackParticles;
+  SyncParticles _ParticleSync;
   SpriteRenderer _Renderer;
 
   [Header("Movement")]
@@ -23,6 +24,8 @@ public class Player : NetworkBehaviour
   {
     _Rigidbody = GetComponent<Rigidbody2D>();
     _Rigidbody.isKinematic = !hasAuthority;
+
+    _ParticleSync = GetComponent<SyncParticles>();
 
     _Renderer = GetComponent<SpriteRenderer>();
     _Renderer.sprite = hasAuthority ? _BlueSprite : _RedSprite;
@@ -43,12 +46,31 @@ public class Player : NetworkBehaviour
     if(input.y > 0)
     {
       Jetpack();
+      SetParticles(_JetpackParticles, true);
+    }
+    else
+    {
+      SetParticles(_JetpackParticles, false);
     }
     float force = input.x * _MoveSpeed;
     force -= _Rigidbody.velocity.x;
     float acceleration = _Acceleration * Time.deltaTime;
     force = Mathf.Clamp(force, -acceleration, acceleration);
     _Rigidbody.velocity += Vector2.right * force;
+  }
+
+  void SetParticles(ParticleSystem system, bool active)
+  {
+    if (active)
+    {
+      system.Play();
+      _ParticleSync.SetActive(true);
+    }
+    else
+    {
+      system.Stop();
+      _ParticleSync.SetActive(false);
+    }
   }
 
   void Jetpack()
@@ -58,10 +80,6 @@ public class Player : NetworkBehaviour
       _Rigidbody.velocity += Vector2.up * _JetpackAcceleration * Time.fixedDeltaTime;
     }
   }
-
-
-
-
   void FlipSprite(Vector2 input)
   {
     if(input.x < 0)
@@ -72,6 +90,7 @@ public class Player : NetworkBehaviour
       transform.rotation = Quaternion.Euler(0, 0, 0);
     }
   }
+
 
   Vector2 GetInput()
   {
