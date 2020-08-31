@@ -13,6 +13,7 @@ public class Player : NetworkBehaviour
   SpriteRenderer _Renderer;
 
   [Header("Movement")]
+  [SerializeField] float _MoveSpeed = 10;
   [SerializeField] float _Acceleration = 50;
   [SerializeField] float _Deceleration = 2;
   [SerializeField] float _JetpackMaxSpeed = 10;
@@ -32,11 +33,34 @@ public class Player : NetworkBehaviour
   {
     if (!hasAuthority) { return; }
 
-    _Link.ApplyForce(GetInput(), ForceMode2D.Impulse);
+    //_Link.ApplyForce(GetInput(), ForceMode2D.Impulse);
     //Vector2 input = GetInput();
     //HandleInput(input);
     //CMDSendInput(input);
+
+    CMDTransform(GetInput() * _MoveSpeed);
+    transform.Translate(GetInput() * _MoveSpeed * Time.fixedDeltaTime);
+
   }
+
+  [Command]
+  void CMDTransform(Vector2 input)
+  {
+    RPCTransform(input);
+
+  }
+
+  [ClientRpc]
+  void RPCTransform(Vector2 input)
+  {
+    if (hasAuthority) { return; }
+    transform.Translate(input * Time.fixedDeltaTime);
+  }
+
+
+
+
+
 
   void HandleInput(Vector2 input)
   {

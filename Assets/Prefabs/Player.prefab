@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 4873289514260818655}
   - component: {fileID: 1009539869047586804}
   - component: {fileID: 7566601988970954833}
-  - component: {fileID: 4713635225373350776}
-  - component: {fileID: 2703527610935956617}
   - component: {fileID: 6811774288835014728}
   - component: {fileID: 6762733917423458087}
   - component: {fileID: 7527262859674198701}
@@ -127,46 +125,6 @@ MonoBehaviour:
   _JetpackMaxSpeed: 10
   _JetpackAcceleration: 1
   _MovementLimits: {x: 15, y: 20}
---- !u!50 &4713635225373350776
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7351640415782515012}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 1
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1.75
-  m_Material: {fileID: 6200000, guid: 105bddb11656bb1488b9e0c756198a2b, type: 2}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 4
---- !u!114 &2703527610935956617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7351640415782515012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4b9ae9d9d9309e429113a94452eada4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.02
-  _Rigidbody: {fileID: 4713635225373350776}
-  _Position: {x: 0, y: 0}
-  _Velocity: {x: 0, y: 0}
-  _AngularVelocity: 0
-  _Rotation: 0
 --- !u!60 &6811774288835014728
 PolygonCollider2D:
   m_ObjectHideFlags: 0
