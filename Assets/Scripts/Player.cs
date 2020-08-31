@@ -30,7 +30,7 @@ public class Player : NetworkBehaviour
     if (!hasAuthority) { return; }
     Vector2 input = GetInput();
     HandleInput(input);
-    CMDSendInput(input);
+    //CMDSendInput(input);
   }
 
   void HandleInput(Vector2 input)
@@ -135,6 +135,7 @@ public class Player : NetworkBehaviour
   [ClientRpc]
   void RPCJetpackParticles(bool active)
   {
+    if (!hasAuthority) { return; }
     DoJetpackParticles(active);
   }
   void DoJetpackParticles(bool active)

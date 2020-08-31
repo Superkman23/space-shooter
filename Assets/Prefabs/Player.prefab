@@ -124,9 +124,8 @@ MonoBehaviour:
   _JetpackParticles: {fileID: 6762733917423458087}
   _Acceleration: 50
   _Deceleration: 1.3
-  _MoveSpeed: 10
   _JetpackMaxSpeed: 10
-  _JetpackAcceleration: 1.2
+  _JetpackAcceleration: 1
   _MovementLimits: {x: 15, y: 20}
 --- !u!50 &4713635225373350776
 Rigidbody2D:
