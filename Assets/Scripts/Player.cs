@@ -19,8 +19,8 @@ public class Player : NetworkBehaviour
   [SerializeField] float _JetpackAcceleration = 1;
   [SerializeField] Vector2 _MovementLimits = new Vector2(5, 5);
 
-  [SyncVar] Vector2 _Input;
-  [SyncVar] float _InputLag;
+  [SyncVar] public Vector2 _Input;
+  [SyncVar] public float _InputLag;
 
 
   void Start()
