@@ -7,8 +7,8 @@ public class Player : NetworkBehaviour
   Rigidbody2D _Rigidbody;
 
   [Header("Visuals")]
-  [SerializeField] Sprite _RedSprite = null;
-  [SerializeField] Sprite _BlueSprite = null;
+  [SerializeField] Color _EnemyColor = Color.red;
+  [SerializeField] Color _PlayerColor = Color.blue;
   [SerializeField] ParticleSystem _JetpackParticles = null;
   SyncParticles _ParticleSync;
   SpriteRenderer _Renderer;
@@ -16,7 +16,6 @@ public class Player : NetworkBehaviour
   [Header("Movement")]
   [SerializeField] float _MoveSpeed = 10;
   [SerializeField] float _Acceleration = 50;
-  [SerializeField] float _Deceleration = 2;
   [SerializeField] float _JetpackMaxSpeed = 10;
   [SerializeField] float _JetpackAcceleration = 1;
 
@@ -28,7 +27,7 @@ public class Player : NetworkBehaviour
     _ParticleSync = GetComponent<SyncParticles>();
 
     _Renderer = GetComponent<SpriteRenderer>();
-    _Renderer.sprite = hasAuthority ? _BlueSprite : _RedSprite;
+    _Renderer.color = hasAuthority ? _PlayerColor : _EnemyColor;
 
     if (hasAuthority) { SetParticles(_JetpackParticles, false); }
   }
