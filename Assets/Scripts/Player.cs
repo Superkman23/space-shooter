@@ -19,9 +19,6 @@ public class Player : NetworkBehaviour
   [SerializeField] float _JetpackAcceleration = 1;
   [SerializeField] Vector2 _MovementLimits = new Vector2(5, 5);
 
-  [SyncVar] public Vector2 _Input;
-  [SyncVar] public float _InputLag;
-
 
   void Start()
   {
@@ -30,13 +27,12 @@ public class Player : NetworkBehaviour
     _Renderer.sprite = hasAuthority ? _BlueSprite : _RedSprite;
   }
 
+  [Client]
   void FixedUpdate()
   {
     if (!hasAuthority) { return; }
 
-    _Input = GetInput();
-    _InputLag = (float)NetworkTime.rtt;
-    _Link.ApplyForce(_Input, ForceMode2D.Impulse);
+    _Link.ApplyForce(GetInput(), ForceMode2D.Impulse);
     //Vector2 input = GetInput();
     //HandleInput(input);
     //CMDSendInput(input);
