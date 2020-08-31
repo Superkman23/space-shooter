@@ -11,14 +11,13 @@ public class SyncParticles : NetworkBehaviour
 {
 	[SerializeField] ParticleSystem _ParticleSystem = null;
 
-  [SyncVar(hook = nameof(SyncActive))] bool _IsEnabled = false;
+  [SyncVar(hook = nameof(SyncActive))] bool _IsEnabled = true;
 
   [Command]
   public void SetActive(bool active)
   {
     _IsEnabled = active;
   }
-
 
   void SyncActive(bool oldBool, bool newBool)
   {
