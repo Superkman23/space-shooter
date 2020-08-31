@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Mirror;
+using TMPro;
 
 public class Player : NetworkBehaviour
 {
@@ -18,18 +19,26 @@ public class Player : NetworkBehaviour
   [SerializeField] float _JetpackAcceleration = 1;
   [SerializeField] Vector2 _MovementLimits = new Vector2(5, 5);
 
+  [SyncVar] Vector2 _Input;
+  [SyncVar] float _InputLag;
+
+
   void Start()
   {
     _Link = GetComponent<PhysicsLink>();
     _Renderer = GetComponent<SpriteRenderer>();
     _Renderer.sprite = hasAuthority ? _BlueSprite : _RedSprite;
   }
-  [Client]
+
   void FixedUpdate()
   {
     if (!hasAuthority) { return; }
-    Vector2 input = GetInput();
-    HandleInput(input);
+
+    _Input = GetInput();
+    _InputLag = (float)NetworkTime.rtt;
+    _Link.ApplyForce(_Input, ForceMode2D.Impulse);
+    //Vector2 input = GetInput();
+    //HandleInput(input);
     //CMDSendInput(input);
   }
 
@@ -59,7 +68,7 @@ public class Player : NetworkBehaviour
     velocity.x = Mathf.Clamp(velocity.x, -_MovementLimits.x, _MovementLimits.x);
     velocity.y = Mathf.Clamp(velocity.y, -_MovementLimits.y, _MovementLimits.y);
 
-    _Link._Rigidbody.velocity = velocity;
+    _Link.SetVelocity(velocity);
   }
 
   [Command]
