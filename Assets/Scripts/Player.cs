@@ -7,9 +7,9 @@ public class Player : NetworkBehaviour
   Rigidbody2D _Rigidbody;
 
   [Header("Visuals")]
-  [SerializeField] Sprite _RedSprite;
-  [SerializeField] Sprite _BlueSprite;
-  [SerializeField] ParticleSystem _JetpackParticles;
+  [SerializeField] Sprite _RedSprite = null;
+  [SerializeField] Sprite _BlueSprite = null;
+  [SerializeField] ParticleSystem _JetpackParticles = null;
   SyncParticles _ParticleSync;
   SpriteRenderer _Renderer;
 
@@ -29,6 +29,8 @@ public class Player : NetworkBehaviour
 
     _Renderer = GetComponent<SpriteRenderer>();
     _Renderer.sprite = hasAuthority ? _BlueSprite : _RedSprite;
+
+    if (hasAuthority) { SetParticles(_JetpackParticles, false); }
   }
 
   [Client]
