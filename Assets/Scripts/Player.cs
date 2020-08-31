@@ -4,7 +4,7 @@ using TMPro;
 
 public class Player : NetworkBehaviour
 {
-  PhysicsLink _Link;
+  Rigidbody2D _Rigidbody;
 
   [Header("Visuals")]
   [SerializeField] Sprite _RedSprite;
@@ -18,12 +18,14 @@ public class Player : NetworkBehaviour
   [SerializeField] float _Deceleration = 2;
   [SerializeField] float _JetpackMaxSpeed = 10;
   [SerializeField] float _JetpackAcceleration = 1;
-  [SerializeField] Vector2 _MovementLimits = new Vector2(5, 5);
-
 
   void Start()
   {
-    _Link = GetComponent<PhysicsLink>();
+    _Rigidbody = GetComponent<Rigidbody2D>();
+    _Rigidbody.isKinematic = !hasAuthority;
+
+
+
     _Renderer = GetComponent<SpriteRenderer>();
     _Renderer.sprite = hasAuthority ? _BlueSprite : _RedSprite;
   }
@@ -33,7 +35,7 @@ public class Player : NetworkBehaviour
   {
     if (!hasAuthority) { return; }
     Vector2 input = GetInput();
-    transform.position += (Vector3)input * _MoveSpeed * Time.fixedDeltaTime;
+    _Rigidbody.velocity = input * _MoveSpeed;
 
     FlipSprite(input);
   }
