@@ -126,7 +126,7 @@ MonoBehaviour:
   _Acceleration: 75
   _Deceleration: 1.3
   _JetpackMaxSpeed: 10
-  _JetpackAcceleration: 1
+  _JetpackAcceleration: 50
 --- !u!60 &6811774288835014728
 PolygonCollider2D:
   m_ObjectHideFlags: 0

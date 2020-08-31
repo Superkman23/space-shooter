@@ -40,6 +40,10 @@ public class Player : NetworkBehaviour
 
   void HandleMovement(Vector2 input)
   {
+    if(input.y > 0)
+    {
+      Jetpack();
+    }
     float force = input.x * _MoveSpeed;
     force -= _Rigidbody.velocity.x;
     float acceleration = _Acceleration * Time.deltaTime;
@@ -47,6 +51,13 @@ public class Player : NetworkBehaviour
     _Rigidbody.velocity += Vector2.right * force;
   }
 
+  void Jetpack()
+  {
+    if(_Rigidbody.velocity.y < _JetpackMaxSpeed)
+    {
+      _Rigidbody.velocity += Vector2.up * _JetpackAcceleration * Time.fixedDeltaTime;
+    }
+  }
 
 
 
