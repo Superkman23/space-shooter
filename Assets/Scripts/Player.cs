@@ -32,9 +32,23 @@ public class Player : NetworkBehaviour
   void FixedUpdate()
   {
     if (!hasAuthority) { return; }
+    Vector2 input = GetInput();
+    transform.position += (Vector3)input * _MoveSpeed * Time.fixedDeltaTime;
 
-    transform.Translate(GetInput() * _MoveSpeed * Time.fixedDeltaTime);
+    FlipSprite(input);
   }
+
+  void FlipSprite(Vector2 input)
+  {
+    if(input.x < 0)
+    {
+      transform.rotation = Quaternion.Euler(0, 180, 0);
+    } else if(input.x > 0)
+    {
+      transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+  }
+
 
   Vector2 GetInput()
   {
