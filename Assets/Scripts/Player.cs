@@ -24,8 +24,6 @@ public class Player : NetworkBehaviour
     _Rigidbody = GetComponent<Rigidbody2D>();
     _Rigidbody.isKinematic = !hasAuthority;
 
-
-
     _Renderer = GetComponent<SpriteRenderer>();
     _Renderer.sprite = hasAuthority ? _BlueSprite : _RedSprite;
   }
@@ -35,10 +33,23 @@ public class Player : NetworkBehaviour
   {
     if (!hasAuthority) { return; }
     Vector2 input = GetInput();
-    _Rigidbody.velocity = input * _MoveSpeed;
 
+    HandleMovement(input);
     FlipSprite(input);
   }
+
+  void HandleMovement(Vector2 input)
+  {
+    float force = input.x * _MoveSpeed;
+    force -= _Rigidbody.velocity.x;
+    float acceleration = _Acceleration * Time.deltaTime;
+    force = Mathf.Clamp(force, -acceleration, acceleration);
+    _Rigidbody.velocity += Vector2.right * force;
+  }
+
+
+
+
 
   void FlipSprite(Vector2 input)
   {
@@ -50,7 +61,6 @@ public class Player : NetworkBehaviour
       transform.rotation = Quaternion.Euler(0, 0, 0);
     }
   }
-
 
   Vector2 GetInput()
   {
@@ -73,6 +83,4 @@ public class Player : NetworkBehaviour
     }
     return input;
   }
-
-
 }
