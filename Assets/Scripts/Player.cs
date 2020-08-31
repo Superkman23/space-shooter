@@ -33,21 +33,7 @@ public class Player : NetworkBehaviour
   {
     if (!hasAuthority) { return; }
 
-    CMDTransform(GetInput() * _MoveSpeed);
     transform.Translate(GetInput() * _MoveSpeed * Time.fixedDeltaTime);
-  }
-
-  [Command]
-  void CMDTransform(Vector2 input)
-  {
-    RPCTransform(input);
-  }
-
-  [ClientRpc]
-  void RPCTransform(Vector2 input)
-  {
-    if (hasAuthority) { return; }
-    transform.Translate(input * Time.fixedDeltaTime);
   }
 
   Vector2 GetInput()
