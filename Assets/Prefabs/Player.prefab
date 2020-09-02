@@ -5109,5 +5109,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.02
+  syncInterval: 0.1
   _ParticleSystem: {fileID: 6762733917423458087}
