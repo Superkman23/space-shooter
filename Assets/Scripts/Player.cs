@@ -62,7 +62,8 @@ public class Player : NetworkBehaviour
     {
       if(_ShootDelayR < 0)
       {
-        Shoot();
+        _ShootDelayR = _ShootDelay;
+        Shoot(gameObject);
       }
     }
 
@@ -106,10 +107,11 @@ public class Player : NetworkBehaviour
   }
 
   [Command]
-  void Shoot()
+  void Shoot(GameObject creator)
   {
-    _ShootDelayR = _ShootDelay;
     GameObject bullet = Instantiate(_BulletPrefab, transform.position, transform.rotation);
+    Bullet bScript = bullet.GetComponent<Bullet>();
+    bScript._Creator = creator;
     NetworkServer.Spawn(bullet);
     Destroy(bullet, 3);
   }

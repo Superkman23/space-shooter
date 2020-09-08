@@ -7,6 +7,7 @@ public class Bullet : NetworkBehaviour
 {
   Rigidbody2D _Rigidbody;
   [SerializeField] float _Speed;
+  public GameObject _Creator; //The player who created the game object
 
   private void Awake()
   {
@@ -24,7 +25,16 @@ public class Bullet : NetworkBehaviour
   {
     if (!isServer)
       return;
-    if (!collision.transform.CompareTag("Player"))
+
+    if(collision.transform.CompareTag("Player"))
+    {
+      if(collision.gameObject != _Creator)
+      {
+        Debug.Log("Hit player!");
+        NetworkServer.Destroy(gameObject);
+        //TODO add damage things here
+      }
+    } else if (!collision.transform.CompareTag("Bullet"))
     {
       NetworkServer.Destroy(gameObject);
     }
