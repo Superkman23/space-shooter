@@ -210,6 +210,7 @@ MonoBehaviour:
   _Acceleration: 75
   _JetpackMaxSpeed: 12
   _JetpackAcceleration: 75
+  _BulletPrefab: {fileID: 2796747401631870413, guid: 1282ec01b3a611b49bacc43d2b926e08, type: 3}
 --- !u!60 &6811774288835014728
 PolygonCollider2D:
   m_ObjectHideFlags: 0

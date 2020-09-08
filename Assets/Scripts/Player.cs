@@ -19,6 +19,9 @@ public class Player : NetworkBehaviour
   [SerializeField] float _JetpackMaxSpeed = 10;
   [SerializeField] float _JetpackAcceleration = 1;
 
+  [Header("Shooting")]
+  [SerializeField] GameObject _BulletPrefab;
+
   void Start()
   {
     _Rigidbody = GetComponent<Rigidbody2D>();
@@ -44,15 +47,18 @@ public class Player : NetworkBehaviour
 
   void HandleMovement(Vector2 input)
   {
+    SetParticles(_JetpackParticles, input.y > 0);
+
     if(input.y > 0)
     {
       Jetpack();
-      SetParticles(_JetpackParticles, true);
     }
-    else
+
+    if(input.y < 0)
     {
-      SetParticles(_JetpackParticles, false);
+      Shoot();
     }
+
     float force = input.x * _MoveSpeed;
     force -= _Rigidbody.velocity.x;
     float acceleration = _Acceleration * Time.deltaTime;
@@ -92,6 +98,15 @@ public class Player : NetworkBehaviour
     }
   }
 
+  [Command]
+  void Shoot()
+  {
+    GameObject bullet = Instantiate(_BulletPrefab, transform.position, transform.rotation);
+    NetworkServer.Spawn(bullet);
+    Destroy(bullet, 3);
+
+
+  }
 
   Vector2 GetInput()
   {
