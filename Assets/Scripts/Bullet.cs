@@ -11,10 +11,7 @@ public class Bullet : NetworkBehaviour
   private void Awake()
   {
     _Rigidbody = GetComponent<Rigidbody2D>();
-    if (!isServer)
-    {
-      _Rigidbody.isKinematic = true;
-    }
+    _Rigidbody.gravityScale = 0;
   }
 
   private void Update()
@@ -23,8 +20,16 @@ public class Bullet : NetworkBehaviour
       _Rigidbody.MovePosition(transform.position + transform.right * _Speed * Time.fixedDeltaTime);
   }
 
+  private void OnTriggerEnter2D(Collider2D collision)
+  {
+    if (!isServer)
+      return;
+    if (!collision.transform.CompareTag("Player"))
+    {
+      NetworkServer.Destroy(gameObject);
+    }
 
 
-
+  }
 
 }

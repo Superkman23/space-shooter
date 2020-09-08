@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Mirror;
-using TMPro;
 
 public class Player : NetworkBehaviour
 {
@@ -21,6 +20,8 @@ public class Player : NetworkBehaviour
 
   [Header("Shooting")]
   [SerializeField] GameObject _BulletPrefab;
+  [SerializeField] float _ShootDelay = 0.2f;
+  float _ShootDelayR;
 
   void Start()
   {
@@ -32,6 +33,8 @@ public class Player : NetworkBehaviour
     _Renderer = GetComponent<SpriteRenderer>();
     _Renderer.color = hasAuthority ? _PlayerColor : _EnemyColor;
 
+    _ShootDelayR = 0;
+
     if (hasAuthority) { SetParticles(_JetpackParticles, false); }
   }
 
@@ -39,6 +42,7 @@ public class Player : NetworkBehaviour
   void FixedUpdate()
   {
     if (!hasAuthority) { return; }
+    _ShootDelayR -= Time.fixedDeltaTime;
     Vector2 input = GetInput();
 
     HandleMovement(input);
@@ -56,7 +60,10 @@ public class Player : NetworkBehaviour
 
     if(input.y < 0)
     {
-      Shoot();
+      if(_ShootDelayR < 0)
+      {
+        Shoot();
+      }
     }
 
     float force = input.x * _MoveSpeed;
@@ -101,11 +108,10 @@ public class Player : NetworkBehaviour
   [Command]
   void Shoot()
   {
+    _ShootDelayR = _ShootDelay;
     GameObject bullet = Instantiate(_BulletPrefab, transform.position, transform.rotation);
     NetworkServer.Spawn(bullet);
     Destroy(bullet, 3);
-
-
   }
 
   Vector2 GetInput()
