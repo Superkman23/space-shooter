@@ -23,6 +23,7 @@ public class Player : NetworkBehaviour
   [SerializeField] float _ShootDelay = 0.2f;
   [SerializeField] KeyCode _ShootKey = KeyCode.S;
   float _ShootDelayR;
+  bool _PressedShootButton;
 
   [Header("Health")]
   [SerializeField] float _MaxHealth = 5;
@@ -49,6 +50,16 @@ public class Player : NetworkBehaviour
     if (isLocalPlayer) { SetParticles(_JetpackParticles, false); }
   }
 
+  private void Update()
+  {
+    if (!isLocalPlayer) { return; }
+    if (Input.GetKeyDown(_ShootKey))
+    {
+      _PressedShootButton = true;
+    }
+  }
+
+
   void FixedUpdate()
   {
     if (!isLocalPlayer) { return; }
@@ -57,8 +68,9 @@ public class Player : NetworkBehaviour
 
     SetParticles(_JetpackParticles, input.y > 0);
 
-    if ((_ShootDelayR < 0 && Input.GetKey(_ShootKey)) || Input.GetKeyDown(_ShootKey))
+    if ((_ShootDelayR < 0 && Input.GetKey(_ShootKey)) || _PressedShootButton)
     {
+      _PressedShootButton = false;
       _ShootDelayR = _ShootDelay;
       CmdShoot();
     }
