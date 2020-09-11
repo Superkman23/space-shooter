@@ -214,7 +214,8 @@ MonoBehaviour:
   _MaxSpeedLimits: {x: 20, y: 15}
   _BulletPrefab: {fileID: 2796747401631870413, guid: 1282ec01b3a611b49bacc43d2b926e08, type: 3}
   _BulletSpawnPosition: {fileID: 3794097665391651619}
-  _ShootDelay: 0.2
+  _HoldShootDelay: 0.2
+  _MinShootDelay: 0.1
   _ShootKey: 115
   _MaxHealth: 5
 --- !u!60 &6811774288835014728
@@ -420,7 +421,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 15
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -1235,20 +1236,20 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 1
-          inSlope: -0.5400997
-          outSlope: -0.5400997
-          tangentMode: 34
+          inSlope: -0.9874569
+          outSlope: -0.9874569
+          tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.33333334
+          outWeight: 0.16159466
         - serializedVersion: 3
-          time: 0.96728516
-          value: 0.47756958
-          inSlope: -0.5400997
-          outSlope: -0.5400997
-          tangentMode: 34
+          time: 1
+          value: 0.080718994
+          inSlope: -0.17407687
+          outSlope: -0.17407687
+          tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.5035063
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2

@@ -22,7 +22,8 @@ public class Player : NetworkBehaviour
   [Header("Shooting")]
   [SerializeField] GameObject _BulletPrefab;
   [SerializeField] Transform _BulletSpawnPosition;
-  [SerializeField] float _ShootDelay = 0.2f;
+  [SerializeField] float _HoldShootDelay = 0.2f;
+  [SerializeField] float _MinShootDelay = 0.1f;
   [SerializeField] KeyCode _ShootKey = KeyCode.S;
   float _ShootDelayR;
   bool _PressedShootButton;
@@ -64,17 +65,24 @@ public class Player : NetworkBehaviour
   void FixedUpdate()
   {
     if (!isLocalPlayer) { return; }
-    _ShootDelayR -= Time.fixedDeltaTime;
     Vector2 input = GetInput();
 
     SetParticles(_JetpackParticles, input.y > 0);
 
-    if ((_ShootDelayR < 0 && Input.GetKey(_ShootKey)) || _PressedShootButton)
+    //Shooting
+    if ((_ShootDelayR <= 0 && Input.GetKey(_ShootKey)) || _PressedShootButton)
     {
+      float difference = _HoldShootDelay - _MinShootDelay;
+
+
       _PressedShootButton = false;
-      _ShootDelayR = _ShootDelay;
-      CmdShoot();
+      if(_ShootDelayR - difference <= 0)
+      {
+        CmdShoot();
+        _ShootDelayR = _HoldShootDelay;
+      }
     }
+    _ShootDelayR -= Time.fixedDeltaTime;
 
     //Vertical Movement
     if (input.y > 0)
