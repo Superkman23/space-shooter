@@ -211,6 +211,7 @@ MonoBehaviour:
   _Acceleration: 75
   _JetpackMaxSpeed: 12
   _JetpackAcceleration: 75
+  _MaxSpeedLimits: {x: 20, y: 15}
   _BulletPrefab: {fileID: 2796747401631870413, guid: 1282ec01b3a611b49bacc43d2b926e08, type: 3}
   _BulletSpawnPosition: {fileID: 3794097665391651619}
   _ShootDelay: 0.2

@@ -17,6 +17,7 @@ public class Player : NetworkBehaviour
   [SerializeField] float _Acceleration = 50;
   [SerializeField] float _JetpackMaxSpeed = 10;
   [SerializeField] float _JetpackAcceleration = 1;
+  [SerializeField] Vector2 _MaxSpeedLimits = Vector2.zero;
 
   [Header("Shooting")]
   [SerializeField] GameObject _BulletPrefab;
@@ -36,7 +37,6 @@ public class Player : NetworkBehaviour
   void Start()
   {
     _Health = _MaxHealth;
-
 
     _Rigidbody = GetComponent<Rigidbody2D>();
     _Rigidbody.isKinematic = !hasAuthority;
@@ -90,6 +90,12 @@ public class Player : NetworkBehaviour
     float acceleration = _Acceleration * Time.deltaTime;
     force = Mathf.Clamp(force, -acceleration, acceleration);
     _Rigidbody.velocity += Vector2.right * force;
+
+    //Clamp speed to max movement
+    Vector2 tempVelocity = _Rigidbody.velocity;
+    tempVelocity.x = Mathf.Clamp(tempVelocity.x, -_MaxSpeedLimits.x, _MaxSpeedLimits.x);
+    tempVelocity.y = Mathf.Clamp(tempVelocity.y, -_MaxSpeedLimits.y, _MaxSpeedLimits.y);
+    _Rigidbody.velocity = tempVelocity;
 
     //Sprite flipping
     if (input.x < 0)
