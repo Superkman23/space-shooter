@@ -21,11 +21,15 @@ public class Player : NetworkBehaviour
   [Header("Shooting")]
   [SerializeField] GameObject _BulletPrefab;
   [SerializeField] float _ShootDelay = 0.2f;
+  [SerializeField] KeyCode _ShootKey = KeyCode.S;
   float _ShootDelayR;
 
   [Header("Health")]
   [SerializeField] float _MaxHealth = 5;
-  float _Health;
+
+  //Game Stats
+  [SyncVar] float _Health;
+  //TODO: Add playername
 
   void Start()
   {
@@ -42,43 +46,47 @@ public class Player : NetworkBehaviour
 
     _ShootDelayR = 0;
 
-    if (hasAuthority) { SetParticles(_JetpackParticles, false); }
+    if (isLocalPlayer) { SetParticles(_JetpackParticles, false); }
   }
 
-  [Client]
   void FixedUpdate()
   {
-    if (!hasAuthority) { return; }
+    if (!isLocalPlayer) { return; }
     _ShootDelayR -= Time.fixedDeltaTime;
     Vector2 input = GetInput();
 
-    HandleMovement(input);
-    FlipSprite(input);
-  }
-
-  void HandleMovement(Vector2 input)
-  {
     SetParticles(_JetpackParticles, input.y > 0);
 
-    if(input.y > 0)
+    if ((_ShootDelayR < 0 && Input.GetKey(_ShootKey)) || Input.GetKeyDown(_ShootKey))
     {
-      Jetpack();
+      _ShootDelayR = _ShootDelay;
+      CmdShoot();
     }
 
-    if(input.y < 0)
+    //Vertical Movement
+    if (input.y > 0)
     {
-      if(_ShootDelayR < 0)
+      if (_Rigidbody.velocity.y < _JetpackMaxSpeed)
       {
-        _ShootDelayR = _ShootDelay;
-        Shoot(gameObject);
+        _Rigidbody.velocity += Vector2.up * _JetpackAcceleration * Time.fixedDeltaTime;
       }
     }
-
+    //Horizontal Movement
     float force = input.x * _MoveSpeed;
     force -= _Rigidbody.velocity.x;
     float acceleration = _Acceleration * Time.deltaTime;
     force = Mathf.Clamp(force, -acceleration, acceleration);
     _Rigidbody.velocity += Vector2.right * force;
+
+    //Sprite flipping
+    if (input.x < 0)
+    {
+      transform.rotation = Quaternion.Euler(0, 180, 0);
+    }
+    else if (input.x > 0)
+    {
+      transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
   }
 
   void SetParticles(ParticleSystem system, bool active)
@@ -95,52 +103,18 @@ public class Player : NetworkBehaviour
     }
   }
 
-  void Jetpack()
-  {
-    if(_Rigidbody.velocity.y < _JetpackMaxSpeed)
-    {
-      _Rigidbody.velocity += Vector2.up * _JetpackAcceleration * Time.fixedDeltaTime;
-    }
-  }
-  void FlipSprite(Vector2 input)
-  {
-    if(input.x < 0)
-    {
-      transform.rotation = Quaternion.Euler(0, 180, 0);
-    } else if(input.x > 0)
-    {
-      transform.rotation = Quaternion.Euler(0, 0, 0);
-    }
-  }
-
   [Command]
-  void Shoot(GameObject creator)
+  void CmdShoot()
   {
     GameObject bullet = Instantiate(_BulletPrefab, transform.position, transform.rotation);
-    Bullet bScript = bullet.GetComponent<Bullet>();
-    bScript._Creator = creator;
+    bullet.GetComponent<Bullet>().SetCreator(gameObject);
     NetworkServer.Spawn(bullet);
-    Destroy(bullet, 3);
   }
 
-
-  [Command]
-  public void CmdRecieveDamage(int damage)
-  {
-    RPCRevieveDamage(damage);
-  }
-
-
-  [ClientRpc]
-  public void RPCRevieveDamage(int damage)
+  public void TakeDamage(int damage)
   {
     _Health -= damage;
-    if (_Health <= 0)
-    {
-      gameObject.SetActive(false);
-    }
   }
-
 
   Vector2 GetInput()
   {

@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.02
+  syncInterval: 0.1
   _EnemyColor: {r: 1, g: 0, b: 0, a: 1}
   _PlayerColor: {r: 0, g: 0, b: 1, a: 1}
   _JetpackParticles: {fileID: 6762733917423458087}
@@ -211,6 +211,9 @@ MonoBehaviour:
   _JetpackMaxSpeed: 12
   _JetpackAcceleration: 75
   _BulletPrefab: {fileID: 2796747401631870413, guid: 1282ec01b3a611b49bacc43d2b926e08, type: 3}
+  _ShootDelay: 0.2
+  _ShootKey: 115
+  _MaxHealth: 5
 --- !u!60 &6811774288835014728
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -5071,7 +5074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.02
+  syncInterval: 0.04
   clientAuthority: 1
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
@@ -5093,7 +5096,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1.75
   m_Material: {fileID: 6200000, guid: 105bddb11656bb1488b9e0c756198a2b, type: 2}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
