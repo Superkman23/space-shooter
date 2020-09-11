@@ -4937,6 +4937,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _Speed: 14
+  _Creator: {fileID: 0}
+  _Damage: 1
 --- !u!114 &6736010102056695713
 MonoBehaviour:
   m_ObjectHideFlags: 0

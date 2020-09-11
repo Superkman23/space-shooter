@@ -23,8 +23,15 @@ public class Player : NetworkBehaviour
   [SerializeField] float _ShootDelay = 0.2f;
   float _ShootDelayR;
 
+  [Header("Health")]
+  [SerializeField] float _MaxHealth = 5;
+  float _Health;
+
   void Start()
   {
+    _Health = _MaxHealth;
+
+
     _Rigidbody = GetComponent<Rigidbody2D>();
     _Rigidbody.isKinematic = !hasAuthority;
 
@@ -115,6 +122,25 @@ public class Player : NetworkBehaviour
     NetworkServer.Spawn(bullet);
     Destroy(bullet, 3);
   }
+
+
+  [Command]
+  public void CmdRecieveDamage(int damage)
+  {
+    RPCRevieveDamage(damage);
+  }
+
+
+  [ClientRpc]
+  public void RPCRevieveDamage(int damage)
+  {
+    _Health -= damage;
+    if (_Health <= 0)
+    {
+      gameObject.SetActive(false);
+    }
+  }
+
 
   Vector2 GetInput()
   {
