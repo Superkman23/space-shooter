@@ -6,26 +6,35 @@ using Mirror;
 public class Bullet : NetworkBehaviour
 {
   Rigidbody2D _Rigidbody;
+  ParticleSystem _ParticleSystem;
+  SpriteRenderer _Renderer;
   [SerializeField] float _Speed;
-  GameObject _Creator;
+  Player _Creator;
   [SerializeField] int _Damage;
+  [SerializeField] Gradient _FriendlyGradient;
+  [SerializeField] Gradient _EnemyGradient;
 
   private void Awake()
   {
+    _ParticleSystem = GetComponent<ParticleSystem>();
+    _Renderer = GetComponent<SpriteRenderer>();
+
     _Rigidbody = GetComponent<Rigidbody2D>();
     _Rigidbody.gravityScale = 0;
     _Rigidbody.velocity = transform.right * _Speed;
   }
+
 
   [ServerCallback]
   private void OnTriggerEnter2D(Collider2D collision)
   {
     if(collision.transform.CompareTag("Player"))
     {
-      if(collision.gameObject != _Creator)
+      Player pHit = collision.transform.GetComponent<Player>();
+      if(pHit != _Creator)
       {
         Debug.Log("Hit player!");
-        collision.gameObject.GetComponent<Player>().TakeDamage(_Damage);
+        pHit.TakeDamage(_Damage);
         NetworkServer.Destroy(gameObject);
       }
     } else if (!collision.transform.CompareTag("Bullet"))
@@ -36,8 +45,24 @@ public class Bullet : NetworkBehaviour
 
   }
 
-  public void SetCreator(GameObject creator)
+  void UpdateVisuals()
+  {
+    var col = _ParticleSystem.colorOverLifetime;
+    if (_Creator.isLocalPlayer)
+    {
+      col.color = _FriendlyGradient;
+      _Renderer.color = _FriendlyGradient.Evaluate(0);
+    }
+    else
+    {
+      col.color = _EnemyGradient;
+      _Renderer.color = _EnemyGradient.Evaluate(0);
+    }
+  }
+
+  public void SetCreator(Player creator)
   {
     _Creator = creator;
+    //UpdateVisuals();
   }
 }

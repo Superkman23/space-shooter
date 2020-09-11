@@ -134,7 +134,7 @@ public class Player : NetworkBehaviour
   void CmdShoot()
   {
     GameObject bullet = Instantiate(_BulletPrefab, _BulletSpawnPosition.position + (Vector3)(_Rigidbody.velocity * (float)NetworkTime.rtt), transform.rotation);
-    bullet.GetComponent<Bullet>().SetCreator(gameObject);
+    bullet.GetComponent<Bullet>().SetCreator(this);
     NetworkServer.Spawn(bullet);
   }
 
