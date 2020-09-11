@@ -20,6 +20,7 @@ public class Player : NetworkBehaviour
 
   [Header("Shooting")]
   [SerializeField] GameObject _BulletPrefab;
+  [SerializeField] Transform _BulletSpawnPosition;
   [SerializeField] float _ShootDelay = 0.2f;
   [SerializeField] KeyCode _ShootKey = KeyCode.S;
   float _ShootDelayR;
@@ -118,7 +119,7 @@ public class Player : NetworkBehaviour
   [Command]
   void CmdShoot()
   {
-    GameObject bullet = Instantiate(_BulletPrefab, transform.position, transform.rotation);
+    GameObject bullet = Instantiate(_BulletPrefab, _BulletSpawnPosition.position, transform.rotation);
     bullet.GetComponent<Bullet>().SetCreator(gameObject);
     NetworkServer.Spawn(bullet);
   }

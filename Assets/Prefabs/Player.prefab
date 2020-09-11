@@ -212,6 +212,7 @@ MonoBehaviour:
   _JetpackMaxSpeed: 12
   _JetpackAcceleration: 75
   _BulletPrefab: {fileID: 2796747401631870413, guid: 1282ec01b3a611b49bacc43d2b926e08, type: 3}
+  _BulletSpawnPosition: {fileID: 3794097665391651619}
   _ShootDelay: 0.2
   _ShootKey: 115
   _MaxHealth: 5
@@ -5180,5 +5181,10 @@ PrefabInstance:
 --- !u!4 &6651844679087194213 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4086809743741774110, guid: 348c4b677d947c14e9afea029af148f3, type: 3}
+  m_PrefabInstance: {fileID: 7270879840713435515}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3794097665391651619 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5782636252684288600, guid: 348c4b677d947c14e9afea029af148f3, type: 3}
   m_PrefabInstance: {fileID: 7270879840713435515}
   m_PrefabAsset: {fileID: 0}
