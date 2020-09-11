@@ -33,11 +33,13 @@ public class Player : NetworkBehaviour
 
   //Game Stats
   [SyncVar] float _Health;
+  [SyncVar] bool _HasDied;
   //TODO: Add playername
 
   void Start()
   {
     _Health = _MaxHealth;
+    _HasDied = false;
 
     _Rigidbody = GetComponent<Rigidbody2D>();
     _Rigidbody.isKinematic = !hasAuthority;
@@ -64,7 +66,18 @@ public class Player : NetworkBehaviour
 
   void FixedUpdate()
   {
+    if (_Health <= 0) {
+      Debug.Log("Dead");
+      if (!_HasDied)
+      {
+        Debug.Log("Dead2");
+        Die();
+      }
+      return; 
+    }
     if (!isLocalPlayer) { return; }
+
+
     Vector2 input = GetInput();
 
     SetParticles(_JetpackParticles, input.y > 0);
@@ -137,6 +150,13 @@ public class Player : NetworkBehaviour
     bullet.GetComponent<Bullet>().SetCreator(this);
     NetworkServer.Spawn(bullet);
   }
+
+  void Die()
+  {
+    _Renderer.color = Color.black;
+    _HasDied = true;
+  }
+
 
   public void TakeDamage(int damage)
   {
