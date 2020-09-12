@@ -33,13 +33,12 @@ public class Player : NetworkBehaviour
 
   //Game Stats
   [SyncVar] float _Health;
-  [SyncVar] bool _HasDied;
+  [SyncVar] bool _IsDead = false;
   //TODO: Add playername
 
   void Start()
   {
     _Health = _MaxHealth;
-    _HasDied = false;
 
     _Rigidbody = GetComponent<Rigidbody2D>();
     _Rigidbody.isKinematic = !hasAuthority;
@@ -66,15 +65,8 @@ public class Player : NetworkBehaviour
 
   void FixedUpdate()
   {
-    if (_Health <= 0) {
-      Debug.Log("Dead");
-      if (!_HasDied)
-      {
-        Debug.Log("Dead2");
-        Die();
-      }
-      return; 
-    }
+    if (!_IsDead) { return; }
+
     if (!isLocalPlayer) { return; }
 
 
@@ -154,13 +146,17 @@ public class Player : NetworkBehaviour
   void Die()
   {
     _Renderer.color = Color.black;
-    _HasDied = true;
+    _IsDead = true;
   }
 
 
   public void TakeDamage(int damage)
   {
     _Health -= damage;
+    if (_Health <= 0)
+    {
+      Die();
+    }
   }
 
   Vector2 GetInput()
