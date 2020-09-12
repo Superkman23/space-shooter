@@ -65,7 +65,7 @@ public class Player : NetworkBehaviour
 
   void FixedUpdate()
   {
-    if (!_IsDead) { return; }
+    if (_IsDead) { return; }
 
     if (!isLocalPlayer) { return; }
 
@@ -143,6 +143,7 @@ public class Player : NetworkBehaviour
     NetworkServer.Spawn(bullet);
   }
 
+  [ClientRpc]
   void Die()
   {
     _Renderer.color = Color.black;
