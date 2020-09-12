@@ -53,11 +53,6 @@ public class Player : NetworkBehaviour
   {
     if (!isLocalPlayer) { return; }
 
-    if (Input.GetKeyDown(KeyCode.K))
-    {
-      TakeDamage(9999);
-    }
-
     if (Input.GetKeyDown(_ShootKey))
     {
       _PressedShootButton = true;
@@ -136,6 +131,8 @@ public class Player : NetworkBehaviour
     _Renderer.color = hasAuthority ? _PlayerColor : _EnemyColor;
     _DeathTime = 0;
     _IsDead = false;
+    _Rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+    _Rigidbody.velocity = Vector2.zero;
     if (isLocalPlayer) { SetParticles(_JetpackParticles, false); }
   }
 
@@ -167,6 +164,7 @@ public class Player : NetworkBehaviour
     _Renderer.color = Color.black;
     SetParticles(_JetpackParticles, false);
     Debug.Log(transform.name + "Died. feels bad :(");
+    _Rigidbody.constraints = RigidbodyConstraints2D.None;
     _IsDead = true;
   }
 
