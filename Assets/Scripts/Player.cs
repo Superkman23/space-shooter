@@ -53,6 +53,11 @@ public class Player : NetworkBehaviour
   {
     if (!isLocalPlayer) { return; }
 
+    if (Input.GetKeyDown(KeyCode.K))
+    {
+      TakeDamage(9999);
+    }
+
     if (Input.GetKeyDown(_ShootKey))
     {
       _PressedShootButton = true;
