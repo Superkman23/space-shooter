@@ -33,39 +33,42 @@ public class Player : NetworkBehaviour
 
   //Game Stats
   [SyncVar] float _Health;
-  [SyncVar] bool _IsDead = false;
+  [SyncVar] bool _IsDead;
+  float _DeathTime;
   //TODO: Add playername
 
   void Start()
   {
-    _Health = _MaxHealth;
-
     _Rigidbody = GetComponent<Rigidbody2D>();
     _Rigidbody.isKinematic = !hasAuthority;
 
     _ParticleSync = GetComponent<SyncParticles>();
 
     _Renderer = GetComponent<SpriteRenderer>();
-    _Renderer.color = hasAuthority ? _PlayerColor : _EnemyColor;
 
-    _ShootDelayR = 0;
-
-    if (isLocalPlayer) { SetParticles(_JetpackParticles, false); }
+    Setup();
   }
 
   private void Update()
   {
     if (!isLocalPlayer) { return; }
+
     if (Input.GetKeyDown(_ShootKey))
     {
       _PressedShootButton = true;
     }
   }
 
-
   void FixedUpdate()
   {
-    if (_IsDead) { return; }
+    if (_IsDead) {
+      if(_DeathTime >= 3)
+      {
+        CmdRespawn();
+      }
+      _DeathTime += Time.deltaTime;
+      return; 
+    }
 
     if (!isLocalPlayer) { return; }
 
@@ -121,6 +124,16 @@ public class Player : NetworkBehaviour
     }
   }
 
+  void Setup()
+  {
+    _Health = _MaxHealth;
+    _ShootDelayR = 0;
+    _Renderer.color = hasAuthority ? _PlayerColor : _EnemyColor;
+    _DeathTime = 0;
+    _IsDead = false;
+    if (isLocalPlayer) { SetParticles(_JetpackParticles, false); }
+  }
+
   void SetParticles(ParticleSystem system, bool active)
   {
     if (active)
@@ -147,9 +160,27 @@ public class Player : NetworkBehaviour
   void Die()
   {
     _Renderer.color = Color.black;
+    SetParticles(_JetpackParticles, false);
+    Debug.Log(transform.name + "Died. feels bad :(");
     _IsDead = true;
   }
 
+  [Command]
+  void CmdRespawn()
+  {
+    RpcRespawn();
+  }
+
+  [ClientRpc]
+  void RpcRespawn()
+  {
+    //Restore Player stats
+    Debug.Log(transform.name + "has respawned");
+    Transform spawnPosition = NetworkManager.singleton.GetStartPosition();
+    transform.rotation = spawnPosition.rotation;
+    transform.position = spawnPosition.position;
+    Setup();
+  }
 
   public void TakeDamage(int damage)
   {
